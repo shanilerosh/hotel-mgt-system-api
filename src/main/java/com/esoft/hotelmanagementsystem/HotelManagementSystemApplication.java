@@ -1,10 +1,15 @@
 package com.esoft.hotelmanagementsystem;
 
-import org.keycloak.adapters.KeycloakConfigResolver;
-import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
+import com.esoft.hotelmanagementsystem.entity.Role;
+import com.esoft.hotelmanagementsystem.entity.UserMst;
+import com.esoft.hotelmanagementsystem.service.UserService;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 
 @SpringBootApplication
 public class HotelManagementSystemApplication {
@@ -13,10 +18,16 @@ public class HotelManagementSystemApplication {
 		SpringApplication.run(HotelManagementSystemApplication.class, args);
 	}
 
-
 	@Bean
-	public KeycloakConfigResolver KeycloakConfigResolver() {
-		return new KeycloakSpringBootConfigResolver();
+	@Transactional
+	CommandLineRunner run(UserService userService) {
+		return args -> {
+//		userService.saveRole(new Role(null, "ROLE_USER"));
+//
+//		userService.saveUser(new UserMst(null, "Shanil", "shanil", "shanil",new ArrayList<>()));
+//
+//		userService.addRoleToUser("shanil","ROLE_USER");
+		};
 	}
 
 }

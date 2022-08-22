@@ -1,13 +1,21 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/abans?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&characterSetResults=UTF-8&autoReconnect=true&createDatabaseIfNotExist=true
+    url: jdbc:postgresql://localhost:5432/temp1?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&characterSetResults=UTF-8&autoReconnect=true&createDatabaseIfNotExist=true
     username: postgres
     password: root
 
-keycloak:
-  auth-server-url: http://localhost:8081/auth
-  realm: hotel-mgt-system
-  resource: hotel-mgt-web-client
-  public-client: true
-  bearer-only: true
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+      show_sql: false
+      format_sql: true
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      connection:
+        characterEncoding: utf-8
+        CharSet: utf-8
+        useUnicode: true
+
