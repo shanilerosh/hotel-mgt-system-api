@@ -8,6 +8,7 @@ class HotelManagementSystemApplicationTests {
 
 	@Test
 	void contextLoads() {
+		System.out.println("Test");
 	}
 
 }
