@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/abans?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&characterSetResults=UTF-8&autoReconnect=true&createDatabaseIfNotExist=true
+    username: postgres
+    password: root
+
+keycloak:
+  auth-server-url: http://localhost:8081/auth
+  realm: hotel-mgt-system
+  resource: hotel-mgt-web-client
+  public-client: true
+  bearer-only: true

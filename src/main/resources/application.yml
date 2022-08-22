@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: hotel-mgt-api
+  profiles:
+      active: local
+
+server:
+  port: 9008
+  error:
+    whitelabel:
+      enabled: false
+  max-http-header-size: 10MB
