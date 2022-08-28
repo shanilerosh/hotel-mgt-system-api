@@ -3,6 +3,9 @@ spring:
     name: hotel-mgt-api
   profiles:
       active: local
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 server:
   port: 9008
@@ -10,3 +13,4 @@ server:
     whitelabel:
       enabled: false
   max-http-header-size: 10MB
+

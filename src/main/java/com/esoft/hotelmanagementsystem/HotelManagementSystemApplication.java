@@ -1,17 +1,15 @@
 package com.esoft.hotelmanagementsystem;
 
-import com.esoft.hotelmanagementsystem.entity.Role;
-import com.esoft.hotelmanagementsystem.entity.UserMst;
 import com.esoft.hotelmanagementsystem.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-
 @SpringBootApplication
+@EnableWebSecurity
 public class HotelManagementSystemApplication {
 
 	public static void main(String[] args) {
