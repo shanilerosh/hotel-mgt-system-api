@@ -1,6 +1,7 @@
 package com.esoft.hotelmanagementsystem.service;
 
 import com.esoft.hotelmanagementsystem.dto.CommonResponseDto;
+import com.esoft.hotelmanagementsystem.dto.HotelDto;
 import com.esoft.hotelmanagementsystem.dto.HotelMgtCommonFilter;
 import com.esoft.hotelmanagementsystem.dto.RoomDataDto;
 import com.esoft.hotelmanagementsystem.entity.Role;
@@ -15,4 +16,5 @@ public interface RoomService {
 
     CommonResponseDto<RoomDataDto> fetch(HotelMgtCommonFilter filter);
 
+    List<HotelDto> fetchHotelType();
 }

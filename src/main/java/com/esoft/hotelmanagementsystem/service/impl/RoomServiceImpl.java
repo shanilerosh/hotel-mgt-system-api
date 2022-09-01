@@ -1,11 +1,13 @@
 package com.esoft.hotelmanagementsystem.service.impl;
 
 import com.esoft.hotelmanagementsystem.dto.CommonResponseDto;
+import com.esoft.hotelmanagementsystem.dto.HotelDto;
 import com.esoft.hotelmanagementsystem.dto.HotelMgtCommonFilter;
 import com.esoft.hotelmanagementsystem.dto.RoomDataDto;
 import com.esoft.hotelmanagementsystem.entity.Role;
 import com.esoft.hotelmanagementsystem.entity.UserMst;
 import com.esoft.hotelmanagementsystem.exception.CommonException;
+import com.esoft.hotelmanagementsystem.repo.HotelTypeRepo;
 import com.esoft.hotelmanagementsystem.repo.RepositoryCustom;
 import com.esoft.hotelmanagementsystem.repo.RoleRepo;
 import com.esoft.hotelmanagementsystem.repo.UserRepo;
@@ -13,6 +15,7 @@ import com.esoft.hotelmanagementsystem.service.RoomService;
 import com.esoft.hotelmanagementsystem.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author ShanilErosh
@@ -38,6 +42,7 @@ import java.util.*;
 public class RoomServiceImpl implements RoomService {
 
     private final RepositoryCustom customRepo;
+    private final HotelTypeRepo hotelTypeRepo;
 
     @Override
     public CommonResponseDto<RoomDataDto> fetch(HotelMgtCommonFilter filter) {
@@ -92,6 +97,22 @@ public class RoomServiceImpl implements RoomService {
             return CommonResponseDto.<RoomDataDto>builder().data(roomDataDtos.getContent())
                     .total(roomDataDtos.getTotalElements())
                     .build();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new RuntimeException(exception.getMessage());
+        }
+    }
+
+    @Override
+    public List<HotelDto> fetchHotelType() {
+        try {
+            return hotelTypeRepo
+                    .findAll()
+                    .stream().map(obj -> {
+                HotelDto hotelDto = HotelDto.builder().build();
+                BeanUtils.copyProperties(obj, hotelDto);
+                return hotelDto;
+            }).collect(Collectors.toList());
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new RuntimeException(exception.getMessage());

@@ -1,6 +1,7 @@
 package com.esoft.hotelmanagementsystem.controller;
 
 import com.esoft.hotelmanagementsystem.dto.CommonResponseDto;
+import com.esoft.hotelmanagementsystem.dto.HotelDto;
 import com.esoft.hotelmanagementsystem.dto.HotelMgtCommonFilter;
 import com.esoft.hotelmanagementsystem.dto.RoomDataDto;
 import com.esoft.hotelmanagementsystem.entity.Role;
@@ -29,6 +30,12 @@ public class RoomController {
     @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header") })
     public ResponseEntity<CommonResponseDto<RoomDataDto>> fetchFilteredRooms(@RequestBody HotelMgtCommonFilter hotelMgtCommonFilter) {
         return ResponseEntity.ok().body(roomService.fetch(hotelMgtCommonFilter));
+    }
+
+    @GetMapping("/hotel-type")
+    @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header") })
+    public ResponseEntity<List<HotelDto>> fetchHotelType() {
+        return ResponseEntity.ok().body(roomService.fetchHotelType());
     }
 
 

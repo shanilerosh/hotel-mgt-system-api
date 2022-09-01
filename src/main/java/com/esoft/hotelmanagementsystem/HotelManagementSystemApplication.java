@@ -1,6 +1,6 @@
 package com.esoft.hotelmanagementsystem;
 
-import com.esoft.hotelmanagementsystem.repo.RoomTypeRepository;
+import com.esoft.hotelmanagementsystem.repo.HotelTypeRepo;
 import com.esoft.hotelmanagementsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -16,9 +16,6 @@ import java.util.List;
 @EnableWebSecurity
 public class HotelManagementSystemApplication {
 
-	@Autowired
-	private RoomTypeRepository roomTypeRepository;
-
 	public static void main(String[] args) {
 
 		SpringApplication.run(HotelManagementSystemApplication.class, args);
@@ -31,8 +28,6 @@ public class HotelManagementSystemApplication {
 		return args -> {
 
 
-			List<Object> data = roomTypeRepository.findData();
-			System.out.println("sfa");
 //		userService.saveRole(new Role(null, "ROLE_USER"));
 //
 //		userService.saveUser(new UserMst(null, "Shanil", "shanil", "shanil",new ArrayList<>()));
