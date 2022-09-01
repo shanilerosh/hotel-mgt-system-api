@@ -33,11 +33,11 @@ public class RoomController {
         return ResponseEntity.ok().body(roomService.fetch(hotelMgtCommonFilter));
     }
 
-//    @Getter("/{typeId}")
-//    @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header") })
-//    public ResponseEntity<RoomDataDto> fetchRoomData(@PathVariable String roomId) {
-//        return ResponseEntity.ok().body(roomService.fetchOne(roomId));
-//    }
+    @GetMapping("/{typeId}")
+    @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header") })
+    public ResponseEntity<RoomDataDto> fetchRoomData(@PathVariable String typeId) {
+        return ResponseEntity.ok().body(roomService.fetchOne(typeId));
+    }
 
     @GetMapping("/hotel-type")
     @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header") })

@@ -23,7 +23,7 @@ public class RoomImg {
     @NotNull
     private String roomPic;
 
-    @ManyToOne(targetEntity = RoomImg.class,fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = RoomType.class,fetch = FetchType.LAZY)
     @JoinColumn(name = "room_type_id", nullable = false)
     private RoomType roomType;
 

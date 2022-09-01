@@ -1,13 +1,8 @@
 package com.esoft.hotelmanagementsystem.service.impl;
 
-import com.esoft.hotelmanagementsystem.dto.CommonResponseDto;
-import com.esoft.hotelmanagementsystem.dto.HotelDto;
-import com.esoft.hotelmanagementsystem.dto.HotelMgtCommonFilter;
-import com.esoft.hotelmanagementsystem.dto.RoomDataDto;
-import com.esoft.hotelmanagementsystem.entity.Role;
-import com.esoft.hotelmanagementsystem.entity.RoomImg;
-import com.esoft.hotelmanagementsystem.entity.RoomType;
-import com.esoft.hotelmanagementsystem.entity.UserMst;
+import com.esoft.hotelmanagementsystem.dto.*;
+import com.esoft.hotelmanagementsystem.entity.*;
+import com.esoft.hotelmanagementsystem.enums.HouseKeepingStatus;
 import com.esoft.hotelmanagementsystem.exception.CommonException;
 import com.esoft.hotelmanagementsystem.repo.*;
 import com.esoft.hotelmanagementsystem.service.RoomService;
@@ -29,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,7 +40,8 @@ public class RoomServiceImpl implements RoomService {
     private final RepositoryCustom customRepo;
     private final HotelTypeRepo hotelTypeRepo;
     private final RoomTypeRepo roomTypeRepo;
-    private final RoomImgRepo roomImgRepo;
+    private final RoomRepository roomRepo;
+    private final RoomImgRepository roomImgRepo;
 
     @Override
     public CommonResponseDto<RoomDataDto> fetch(HotelMgtCommonFilter filter) {
@@ -133,19 +130,30 @@ public class RoomServiceImpl implements RoomService {
             List<RoomImg> allByRoomType = roomImgRepo.findAllByRoomType(roomType);
             RoomDataDto dto = RoomDataDto.builder().build();
 
+            dto.setNumberOfOccupants(BigDecimal.valueOf(roomType.getNumberOfOccupants()));
+            dto.setCat(roomType.getRoomCategory().toString());
+
+
             BeanUtils.copyProperties(roomType, dto);
 
             List<String> roomImages = allByRoomType.stream().map(RoomImg::getRoomPic).collect(Collectors.toList());
             dto.setSubImages(roomImages);
 
             //calculate the existing rooms
+            List<RoomDto> roomData = roomRepo
+                    .findByRoomTypeAndHouseKeepingStatusNot(roomType, HouseKeepingStatus.DEACTIVE)
+                    .stream().map(obj -> {
+                        RoomDto roomDto = RoomDto.builder().build();
+                        BeanUtils.copyProperties(obj, roomDto);
+                        return roomDto;
+                    }).collect(Collectors.toList());
 
+            dto.setRoomDtos(roomData);
 
             return dto;
         } catch (RuntimeException exception) {
             exception.printStackTrace();
             throw new RuntimeException(exception.getMessage());
         }
-
     }
 }

@@ -23,4 +23,5 @@ public class RoomDataDto implements Serializable {
     private BigDecimal numberOfOccupants;
 
     private List<String> subImages;
+    private List<RoomDto> roomDtos;
 }
