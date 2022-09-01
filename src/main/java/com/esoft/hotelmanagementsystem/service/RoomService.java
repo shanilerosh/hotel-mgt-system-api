@@ -17,4 +17,6 @@ public interface RoomService {
     CommonResponseDto<RoomDataDto> fetch(HotelMgtCommonFilter filter);
 
     List<HotelDto> fetchHotelType();
+
+    RoomDataDto fetchOne(String roomId);
 }

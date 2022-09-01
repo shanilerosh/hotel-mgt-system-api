@@ -5,16 +5,16 @@ import com.esoft.hotelmanagementsystem.dto.HotelDto;
 import com.esoft.hotelmanagementsystem.dto.HotelMgtCommonFilter;
 import com.esoft.hotelmanagementsystem.dto.RoomDataDto;
 import com.esoft.hotelmanagementsystem.entity.Role;
+import com.esoft.hotelmanagementsystem.entity.RoomImg;
+import com.esoft.hotelmanagementsystem.entity.RoomType;
 import com.esoft.hotelmanagementsystem.entity.UserMst;
 import com.esoft.hotelmanagementsystem.exception.CommonException;
-import com.esoft.hotelmanagementsystem.repo.HotelTypeRepo;
-import com.esoft.hotelmanagementsystem.repo.RepositoryCustom;
-import com.esoft.hotelmanagementsystem.repo.RoleRepo;
-import com.esoft.hotelmanagementsystem.repo.UserRepo;
+import com.esoft.hotelmanagementsystem.repo.*;
 import com.esoft.hotelmanagementsystem.service.RoomService;
 import com.esoft.hotelmanagementsystem.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.apache.bcel.ExceptionConstants;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,6 +43,8 @@ public class RoomServiceImpl implements RoomService {
 
     private final RepositoryCustom customRepo;
     private final HotelTypeRepo hotelTypeRepo;
+    private final RoomTypeRepo roomTypeRepo;
+    private final RoomImgRepo roomImgRepo;
 
     @Override
     public CommonResponseDto<RoomDataDto> fetch(HotelMgtCommonFilter filter) {
@@ -117,5 +119,33 @@ public class RoomServiceImpl implements RoomService {
             exception.printStackTrace();
             throw new RuntimeException(exception.getMessage());
         }
+    }
+
+    @Override
+    public RoomDataDto fetchOne(String roomId) {
+
+        try {
+            RoomType roomType = roomTypeRepo
+                    .findByRoomTypeId(Long.valueOf(roomId)).orElseThrow(() -> {
+                        throw new CommonException("Record not found");
+                    });
+
+            List<RoomImg> allByRoomType = roomImgRepo.findAllByRoomType(roomType);
+            RoomDataDto dto = RoomDataDto.builder().build();
+
+            BeanUtils.copyProperties(roomType, dto);
+
+            List<String> roomImages = allByRoomType.stream().map(RoomImg::getRoomPic).collect(Collectors.toList());
+            dto.setSubImages(roomImages);
+
+            //calculate the existing rooms
+
+
+            return dto;
+        } catch (RuntimeException exception) {
+            exception.printStackTrace();
+            throw new RuntimeException(exception.getMessage());
+        }
+
     }
 }

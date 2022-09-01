@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author ShanilErosh
@@ -18,6 +19,8 @@ public class RoomDataDto implements Serializable {
     private String roomDetail;
     private String cat;
     private BigDecimal roomPrice;
-    private BigDecimal mainImg;
+    private String mainImg;
     private BigDecimal numberOfOccupants;
+
+    private List<String> subImages;
 }

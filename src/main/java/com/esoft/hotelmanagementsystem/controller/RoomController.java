@@ -10,6 +10,7 @@ import com.esoft.hotelmanagementsystem.service.RoomService;
 import com.esoft.hotelmanagementsystem.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,12 @@ public class RoomController {
     public ResponseEntity<CommonResponseDto<RoomDataDto>> fetchFilteredRooms(@RequestBody HotelMgtCommonFilter hotelMgtCommonFilter) {
         return ResponseEntity.ok().body(roomService.fetch(hotelMgtCommonFilter));
     }
+
+//    @Getter("/{typeId}")
+//    @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header") })
+//    public ResponseEntity<RoomDataDto> fetchRoomData(@PathVariable String roomId) {
+//        return ResponseEntity.ok().body(roomService.fetchOne(roomId));
+//    }
 
     @GetMapping("/hotel-type")
     @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header") })
