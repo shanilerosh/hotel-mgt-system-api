@@ -28,4 +28,8 @@ public class ReservationDto implements Serializable {
 
     private List<RoomDto> roomList;
 
+    //user related
+    private String username;
+
+
 }

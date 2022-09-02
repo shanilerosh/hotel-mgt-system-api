@@ -35,9 +35,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserMst saveUser(UserMst user) {
-        log.info("Saving new {} user to the db", user.getUsername());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepo.save(user);
+        try {
+            log.info("Saving new {} user to the db", user.getUsername());
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            return userRepo.save(user);
+        } catch (Exception exception) {
+            throw exception;
+        }
     }
 
     @Override
@@ -59,6 +63,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 });
 
         user.getRoles().add(roleMst);
+
+        saveUser(user);
     }
 
     @Override

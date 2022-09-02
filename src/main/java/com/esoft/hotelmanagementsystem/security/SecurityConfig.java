@@ -3,6 +3,7 @@ package com.esoft.hotelmanagementsystem.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests(aut -> aut.mvcMatchers("/swagger-ui/**").permitAll());
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/customer/").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(new CustomerAuthenticationFilter(authenticationManagerBean()));
         http.addFilterBefore(new CustomerAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
