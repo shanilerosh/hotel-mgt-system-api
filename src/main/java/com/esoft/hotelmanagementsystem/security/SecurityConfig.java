@@ -32,10 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests(aut -> aut.mvcMatchers("/swagger-ui/**").permitAll());
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/customer/").permitAll();
-        http.authorizeRequests().antMatchers("/test1/**","/gs-guide-websocket/**").permitAll();
-        http.authorizeRequests().anyRequest().permitAll();
-//        http.addFilter(new CustomerAuthenticationFilter(authenticationManagerBean()));
-//        http.addFilterBefore(new CustomerAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.authorizeRequests().anyRequest().authenticated();
+        http.addFilter(new CustomerAuthenticationFilter(authenticationManagerBean()));
+        http.addFilterBefore(new CustomerAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
     }
 
