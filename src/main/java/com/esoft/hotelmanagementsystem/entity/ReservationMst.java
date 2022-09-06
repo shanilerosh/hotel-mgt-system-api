@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -31,6 +32,18 @@ public class ReservationMst {
     @ManyToMany
     Set<Room> tableRooms;
 
-    //TODO - Integrate customer
+    @ManyToOne(targetEntity = CustomerMst.class,fetch = FetchType.LAZY)
+    @JoinColumn(name = "custId", nullable = false)
+    private CustomerMst customerMst;
+
+    @OneToOne(targetEntity = UserMst.class)
+    @JoinColumn(name = "user_id")
+    private UserMst createdUser;
+
+    //credit card data
+    private boolean isCreditCardApplicable;
+    private String creditCardNumber;
+    private LocalDate expirationDate;
+    private String cardCsv;
 
 }

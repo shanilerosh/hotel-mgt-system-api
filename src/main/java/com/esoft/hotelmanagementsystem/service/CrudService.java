@@ -7,7 +7,7 @@ import com.esoft.hotelmanagementsystem.dto.CommonResponseDto;
  */
 public interface CrudService<T, ID> {
 
-    Boolean create(T dto);
+    Boolean createReservation(T dto);
 
     Boolean update(ID id, T dto);
 

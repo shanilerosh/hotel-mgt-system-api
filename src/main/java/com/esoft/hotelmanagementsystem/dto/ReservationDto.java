@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,6 +31,16 @@ public class ReservationDto implements Serializable {
 
     //user related
     private String username;
+
+    ///customer dto
+    private CustomerDto customerDto;
+
+    //creadit card data
+    private boolean isCreditCardApplicable;
+    private String creditCardNumber;
+    private LocalDate expirationDate;
+    private String cardCsv;
+
 
 
 }

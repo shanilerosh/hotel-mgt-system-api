@@ -2,6 +2,7 @@ package com.esoft.hotelmanagementsystem;
 
 import com.esoft.hotelmanagementsystem.repo.HotelTypeRepo;
 import com.esoft.hotelmanagementsystem.service.UserService;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @SpringBootApplication
 @EnableWebSecurity
+@EnableRabbit
 public class HotelManagementSystemApplication {
 
 	public static void main(String[] args) {

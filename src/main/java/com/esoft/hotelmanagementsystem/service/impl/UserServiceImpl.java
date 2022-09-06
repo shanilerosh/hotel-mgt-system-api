@@ -46,7 +46,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public Role saveRole(Role role) {
-        log.info("Saving new {} role to the db", role.getName());
+
+        roleRepo.findByName(role.getName())
+                .ifPresent(c -> {
+                    throw new CommonException("Role Already Exist with the name "+ role.getName());
+                });
+
         return roleRepo.save(role);
     }
 
@@ -71,7 +76,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserMst getUser(String username) {
         return userRepo.findByUsername(username)
                 .orElseThrow(() -> {
-                    throw new CommonException("Error");
+                    throw new CommonException("User not exist with username "+username);
                 });
     }
 
