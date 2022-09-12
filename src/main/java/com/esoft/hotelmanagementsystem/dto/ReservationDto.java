@@ -1,6 +1,7 @@
 package com.esoft.hotelmanagementsystem.dto;
 
 import com.esoft.hotelmanagementsystem.enums.ReservationStatus;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.io.Serializable;
@@ -38,6 +39,7 @@ public class ReservationDto implements Serializable {
     private CustomerDto customerDto;
 
     //creadit card data
+    @JsonProperty("isCreditCardApplicable")
     private boolean isCreditCardApplicable;
     private String creditCardNumber;
     private LocalDate expirationDate;
