@@ -43,6 +43,11 @@ public class ReservationDto implements Serializable {
     private LocalDate expirationDate;
     private String cardCsv;
 
+    private String customerName;
+    private String country;
+    private String nicPass;
+    private String status;
+
 
 
 }

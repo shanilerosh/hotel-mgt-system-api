@@ -12,5 +12,5 @@ public interface ReservationService extends CrudService<ReservationDto, Long>{
 
     Boolean createClarkReservation(ReservationDto reservationDto);
 
-    CommonResponseDto<ReservationDto> fetchReservationData(ReservationCommonFilter reservationDto, String status);
+    CommonResponseDto<ReservationDto> fetchReservationData(ReservationCommonFilter reservationDto, String status, boolean isClark);
 }

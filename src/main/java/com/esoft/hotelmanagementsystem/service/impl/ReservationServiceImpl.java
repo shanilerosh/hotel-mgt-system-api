@@ -135,65 +135,99 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public CommonResponseDto<ReservationDto> fetchReservationData(ReservationCommonFilter filter, String status) {
+    public CommonResponseDto<ReservationDto> fetchReservationData(ReservationCommonFilter filter, String status, boolean isClark) {
 
 
-//        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-//        String sql = "";
-//        String orderDesc;
-//
-//
-//        if(0 != filter.getNumberOfOccupants()) {
-//            mapSqlParameterSource.addValue("hotelType", filter.getHotelType().trim());
-//            sql += " AND LOWER(ht.hotel_name) = LOWER(:hotelType)";
-//        }
-//
-//        if(null != filter.getRoomCategory() && !filter.getRoomCategory().isEmpty()) {
-//            mapSqlParameterSource.addValue("cat", filter.getRoomCategory().trim());
-//            sql += " AND LOWER(rt.room_category) = LOWER(:cat)";
-//        }
-//
-//        if(0 != filter.getNumberOfOccupants()) {
-//            mapSqlParameterSource.addValue("numberOfOccupants", filter.getNumberOfOccupants());
-//            sql += " AND rt.number_of_occupants = :numberOfOccupants";
-//        }
-//
-//        //TODO add arrival
-//
-//        String sqlCustom = "select rt.room_type_id, rt.room_detail, rt.room_price, rt.main_img, rt.number_of_occupants,rt.room_category from room r\n" +
-//                "	left join room_type rt on r.room_type_id = rt.room_type_id\n" +
-//                "	left join hotel_mst ht on ht.hotel_id= rt.hotel_id\n" +
-//                "	WHERE r.house_keeping_status != 'DEACTIVE'\n";
-//
-//        String finalizedSql = sqlCustom.concat(sql).concat(" GROUP BY rt.room_type_id, rt.room_detail");
-//        String count = "Select count(*) from room_type";
-//
-//
-//        PageRequest pageable = PageRequest.of(filter.getPage(), filter.getSize());
-//
-//        Map<String, String> paramField = new HashMap<>();
-//
-//        paramField.put("roomTypeId","room_type_id");
-//        paramField.put("roomDetail","room_detail");
-//        paramField.put("roomPrice","room_price");
-//        paramField.put("mainImg","main_img");
-//        paramField.put("numberOfOccupants","number_of_occupants");
-//        paramField.put("cat","room_category");
-//
-//        try {
-//            Page<RoomDataDto> roomDataDtos = customRepo.executeCustomQuery(pageable, finalizedSql,
-//                    mapSqlParameterSource, RoomDataDto.class, paramField, count);
-//
-//
-//            return CommonResponseDto.<RoomDataDto>builder().data(roomDataDtos.getContent())
-//                    .total(roomDataDtos.getTotalElements())
-//                    .build();
-//        } catch (Exception exception) {
-//            exception.printStackTrace();
-//            throw new RuntimeException(exception.getMessage());
-//        }
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        String sql = "";
+        String orderDesc;
 
-        return null;
+        //if it a clark all data should be show. Is not only the corresponding customer data should be displayed
+        if(!isClark){
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            //TODO - Implement this when customer data is fetched
+
+        }
+
+        if(null == status) {
+            throw new CommonException("Reservation Status cannot be null");
+        }
+
+        sql = sql.concat(" WHERE r.reservation_status = :status");
+        mapSqlParameterSource.addValue("status", status);
+
+
+        if(null != filter.getActualCheckedInTimeFrom() && null != filter.getActualCheckedInTimeTO()) {
+            mapSqlParameterSource.addValue("actualCheckedInFrom", filter.getActualCheckedInTimeFrom());
+            mapSqlParameterSource.addValue("actualCheckedInTo", filter.getActualCheckedInTimeTO());
+            sql = sql.concat(" AND r.actual_checked_in_time BETWEEN :actualCheckedInFrom And :actualCheckedInTo ");
+        }
+
+        if(null != filter.getActualCheckedOutTimeFrom() && null != filter.getActualCheckedOutTimeTO()) {
+            mapSqlParameterSource.addValue("actualCheckedOutFrom", filter.getActualCheckedOutTimeFrom());
+            mapSqlParameterSource.addValue("actualCheckedOutTo", filter.getActualCheckedOutTimeTO());
+            sql = sql.concat(" AND r.actual_checked_out_time BETWEEN :actualCheckedOutFrom And :actualCheckedOutTo ");
+        }
+
+        if(null != filter.getPromisedCheckedInTimeFrom() && null != filter.getPromisedCheckedInTimeTo()) {
+            mapSqlParameterSource.addValue("promisedCheckInTimeFrom", filter.getPromisedCheckedInTimeFrom());
+            mapSqlParameterSource.addValue("promisedCheckInTimeTo", filter.getPromisedCheckedInTimeTo());
+            sql = sql.concat(" AND r.promised_checked_in_time BETWEEN :promisedCheckInTimeFrom And :promisedCheckInTimeTo ");
+        }
+
+        if(null != filter.getPromisedCheckedOutTimeFrom() && null != filter.getPromisedCheckedInTimeTo()) {
+            mapSqlParameterSource.addValue("promisedCheckOutTimeFrom", filter.getPromisedCheckedOutTimeFrom());
+            mapSqlParameterSource.addValue("promisedCheckOutTimeTo", filter.getPromisedCheckedOutTimeTo());
+            sql = sql.concat(" AND r.promised_checked_out_time BETWEEN :promisedCheckOutTimeFrom And :promisedCheckOutTimeTo ");
+        }
+
+        if(null != filter.getNicPass() && !filter.getNicPass().isEmpty()) {
+            mapSqlParameterSource.addValue("nicPass", filter.getNicPass());
+            sql = sql.concat(" AND LOWER(c.nic_pass) LIKE LOWER(:nicPass) ");
+        }
+
+        if(null != filter.getCustomerName() && !filter.getCustomerName().isEmpty()) {
+            mapSqlParameterSource.addValue("customerName", filter.getCustomerName());
+            sql = sql.concat(" AND LOWER(c.customer_name) LIKE LOWER(:customerName) ");
+        }
+
+
+        String sqlCustom = "SELECT r.actual_checked_in_time, r.actual_checked_out_time, r.promised_checked_in_time, r.promised_checked_out_time, r.reservation_id, r.total_amount, c.customer_name, c.country, c.nic_pass, r.reservation_status FROM reservation_mst r LEFT JOIN customer_mst c\n" +
+                "ON r.cust_id = c.cust_id ";
+
+        String finalizedSql = sqlCustom.concat(sql);
+        String count = "SELECT count(*) FROM reservation_mst r LEFT JOIN customer_mst c\n" +
+                "ON r.cust_id = c.cust_id ".concat(sql);
+
+
+        PageRequest pageable = PageRequest.of(filter.getPage(), filter.getSize());
+
+        Map<String, String> paramField = new HashMap<>();
+
+        paramField.put("actualCheckedInTime","actual_checked_in_time");
+        paramField.put("actualCheckedOutTime","actual_checked_out_time");
+        paramField.put("promisedCheckedInTime","promised_checked_in_time");
+        paramField.put("promisedCheckedOutTime","promised_checked_out_time");
+        paramField.put("reservationId","reservation_id");
+        paramField.put("totalAmount","total_amount");
+        paramField.put("customerName","customer_name");
+        paramField.put("country","country");
+        paramField.put("nicPass","nic_pass");
+        paramField.put("status","reservation_status");
+
+        try {
+            Page<ReservationDto> reservationDtos = customRepo.executeCustomQuery(pageable, finalizedSql,
+                    mapSqlParameterSource, ReservationDto.class, paramField, count);
+
+
+            return CommonResponseDto.<ReservationDto>builder().data(reservationDtos.getContent())
+                    .total(reservationDtos.getTotalElements())
+                    .build();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new RuntimeException(exception.getMessage());
+        }
+
     }
 
     private void isCstomerDtoNotNull(ReservationDto reservationDto) {

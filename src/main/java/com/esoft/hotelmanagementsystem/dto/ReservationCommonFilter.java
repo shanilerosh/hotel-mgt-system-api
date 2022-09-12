@@ -19,5 +19,15 @@ public class ReservationCommonFilter {
     private String sortOrder;
 
     //filterations
-
+    private LocalDateTime promisedCheckedInTimeFrom;
+    private LocalDateTime promisedCheckedInTimeTo;
+    private LocalDateTime promisedCheckedOutTimeFrom;
+    private LocalDateTime promisedCheckedOutTimeTo;
+    private LocalDateTime actualCheckedInTimeFrom;
+    private LocalDateTime actualCheckedOutTimeFrom;
+    private LocalDateTime actualCheckedInTimeTO;
+    private LocalDateTime actualCheckedOutTimeTO;
+    private String nicPass;
+    private String customerName;
+    private String customerCountry;
 }

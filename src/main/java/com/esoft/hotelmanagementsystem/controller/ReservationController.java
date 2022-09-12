@@ -47,11 +47,11 @@ public class ReservationController {
      * @param reservationDto
      * @return
      */
-    @PostMapping("/{status}")
+    @PostMapping("/clark/{status}")
     @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header") })
     public ResponseEntity<CommonResponseDto<ReservationDto>> fetchReservationData(@RequestBody ReservationCommonFilter reservationDto,
                                                                                   @PathVariable String status) {
-        return ResponseEntity.ok().body(reservationService.fetchReservationData(reservationDto, status));
+        return ResponseEntity.ok().body(reservationService.fetchReservationData(reservationDto, status, true));
     }
 
 }

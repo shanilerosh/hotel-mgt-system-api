@@ -28,6 +28,7 @@ public class ReservationMst {
     private LocalDateTime actualCheckedInTime;
     private LocalDateTime actualCheckedOutTime;
     private LocalDateTime createdDateTime;
+    @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus;
     private BigDecimal totalAmount;
 
