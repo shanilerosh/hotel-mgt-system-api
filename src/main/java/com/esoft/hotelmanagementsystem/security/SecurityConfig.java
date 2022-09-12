@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 /**
  * @author ShanilErosh
@@ -32,9 +33,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests(aut -> aut.mvcMatchers("/swagger-ui/**").permitAll());
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/customer/").permitAll();
+        http.authorizeRequests().antMatchers( "/api/rooms/**").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(new CustomerAuthenticationFilter(authenticationManagerBean()));
         http.addFilterBefore(new CustomerAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
+
 
     }
 
