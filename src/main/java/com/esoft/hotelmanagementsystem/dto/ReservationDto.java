@@ -21,6 +21,8 @@ import java.util.List;
 public class ReservationDto implements Serializable {
 
     private Long reservationId;
+    private LocalDateTime promisedCheckedInTime;
+    private LocalDateTime promisedCheckedOutTime;
     private LocalDateTime actualCheckedInTime;
     private LocalDateTime actualCheckedOutTime;
     private LocalDateTime createdDateTime;

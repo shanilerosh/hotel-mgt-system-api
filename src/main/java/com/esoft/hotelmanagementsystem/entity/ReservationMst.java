@@ -23,6 +23,8 @@ public class ReservationMst {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservationId;
+    private LocalDateTime promisedCheckedInTime;
+    private LocalDateTime promisedCheckedOutTime;
     private LocalDateTime actualCheckedInTime;
     private LocalDateTime actualCheckedOutTime;
     private LocalDateTime createdDateTime;
