@@ -21,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.yaml.snakeyaml.util.EnumUtils;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
@@ -165,7 +166,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         }
 
-        if (null != status) {
+        if (ReservationStatus.contains(status)) {
             sql = sql.concat(" AND r.reservation_status = :status");
             mapSqlParameterSource.addValue("status", status);
         }
