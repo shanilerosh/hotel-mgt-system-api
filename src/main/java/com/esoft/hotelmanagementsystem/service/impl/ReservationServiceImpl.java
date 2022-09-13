@@ -122,6 +122,9 @@ public class ReservationServiceImpl implements ReservationService {
                 .isNonSmoking(obj.getIsNonSmoking())
                 .roomNumber(obj.getRoomNumber())
                 .roomRemark(obj.getRoomRemark())
+                .roomCat(obj.getRoomType().getRoomCategory().toString())
+                .roomPrice(obj.getRoomType().getRoomPrice())
+                .roomDetail(obj.getRoomType().getRoomDetail())
                 .build()).collect(Collectors.toList());
         reservationDto.setRoomList(roomDtoList);
 

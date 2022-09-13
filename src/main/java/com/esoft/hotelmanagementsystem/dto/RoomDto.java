@@ -5,6 +5,7 @@ import com.esoft.hotelmanagementsystem.enums.HouseKeepingStatus;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 /**
  * @author ShanilErosh
@@ -21,5 +22,9 @@ public class RoomDto {
     private String roomRemark;
     private HouseKeepingStatus houseKeepingStatus;
     private Boolean isNonSmoking;
+    private String roomDetail;
+    private BigDecimal roomPrice;
+    private String roomCat;
+
 
 }
