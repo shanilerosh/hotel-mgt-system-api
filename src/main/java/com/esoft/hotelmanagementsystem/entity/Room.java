@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Set;
 
 /**
  * @author ShanilErosh
@@ -29,5 +30,8 @@ public class Room {
     @ManyToOne(targetEntity = RoomType.class,fetch = FetchType.EAGER)
     @JoinColumn(name = "room_type_id", nullable = false)
     private RoomType roomType;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<ReservationMst> reservationMsts;
 
 }

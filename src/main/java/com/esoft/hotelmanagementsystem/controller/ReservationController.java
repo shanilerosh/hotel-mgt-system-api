@@ -29,6 +29,17 @@ public class ReservationController {
         return ResponseEntity.ok().body(reservationService.createReservation(reservationDto));
     }
 
+    /**
+     * APi To fetch reservation by Id
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header") })
+    public ResponseEntity<ReservationDto> fetchReservationById(@PathVariable String id) {
+        return ResponseEntity.ok().body(reservationService.fetchOne(Long.valueOf(id)));
+    }
+
 
     /**
      * API to create reservation as a clark

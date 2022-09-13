@@ -32,7 +32,7 @@ public class ReservationMst {
     private ReservationStatus reservationStatus;
     private BigDecimal totalAmount;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     Set<Room> tableRooms;
 
     @ManyToOne(targetEntity = CustomerMst.class,fetch = FetchType.LAZY)

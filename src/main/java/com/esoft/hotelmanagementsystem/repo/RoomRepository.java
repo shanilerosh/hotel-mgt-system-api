@@ -1,5 +1,6 @@
 package com.esoft.hotelmanagementsystem.repo;
 
+import com.esoft.hotelmanagementsystem.entity.ReservationMst;
 import com.esoft.hotelmanagementsystem.entity.Room;
 import com.esoft.hotelmanagementsystem.entity.RoomType;
 import com.esoft.hotelmanagementsystem.enums.HouseKeepingStatus;
@@ -14,4 +15,6 @@ import java.util.Optional;
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
     List<Room> findByRoomTypeAndHouseKeepingStatusNot(RoomType roomType, HouseKeepingStatus status);
+
+    List<Room> findAllByReservationMsts(ReservationMst reservationMst);
 }

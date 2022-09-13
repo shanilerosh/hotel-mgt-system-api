@@ -1,9 +1,6 @@
 package com.esoft.hotelmanagementsystem.service.impl;
 
-import com.esoft.hotelmanagementsystem.dto.CommonResponseDto;
-import com.esoft.hotelmanagementsystem.dto.ReservationCommonFilter;
-import com.esoft.hotelmanagementsystem.dto.ReservationDto;
-import com.esoft.hotelmanagementsystem.dto.RoomDataDto;
+import com.esoft.hotelmanagementsystem.dto.*;
 import com.esoft.hotelmanagementsystem.entity.CustomerMst;
 import com.esoft.hotelmanagementsystem.entity.ReservationMst;
 import com.esoft.hotelmanagementsystem.entity.Room;
@@ -25,8 +22,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -107,8 +106,25 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ReservationDto fetchOne(Long aLong, ReservationDto dto) {
-        return null;
+    public ReservationDto fetchOne(Long id) {
+
+        ReservationMst reservationMst = reservationRepository.findById(id)
+                .orElseThrow(() -> {
+                    throw new CommonException("Reservation Not Found");
+                });
+
+        ReservationDto reservationDto = ReservationDto.builder().build();
+        BeanUtils.copyProperties(reservationMst, reservationDto);
+
+        List<RoomDto> roomDtoList = reservationMst.getTableRooms().stream().map(obj -> RoomDto.builder().roomId(obj.getRoomId())
+                .houseKeepingStatus(obj.getHouseKeepingStatus())
+                .isNonSmoking(obj.getIsNonSmoking())
+                .roomNumber(obj.getRoomNumber())
+                .roomRemark(obj.getRoomRemark())
+                .build()).collect(Collectors.toList());
+
+        reservationDto.setRoomList(roomDtoList);
+        return reservationDto;
     }
 
     @Override
@@ -149,13 +165,10 @@ public class ReservationServiceImpl implements ReservationService {
 
         }
 
-        if(null == status) {
-            throw new CommonException("Reservation Status cannot be null");
+        if (null != status) {
+            sql = sql.concat(" AND r.reservation_status = :status");
+            mapSqlParameterSource.addValue("status", status);
         }
-
-        sql = sql.concat(" WHERE r.reservation_status = :status");
-        mapSqlParameterSource.addValue("status", status);
-
 
         if(null != filter.getActualCheckedInTimeFrom() && null != filter.getActualCheckedInTimeTO()) {
             mapSqlParameterSource.addValue("actualCheckedInFrom", filter.getActualCheckedInTimeFrom());
@@ -193,11 +206,11 @@ public class ReservationServiceImpl implements ReservationService {
 
 
         String sqlCustom = "SELECT r.actual_checked_in_time, r.actual_checked_out_time, r.promised_checked_in_time, r.promised_checked_out_time, r.reservation_id, r.total_amount, c.customer_name, c.country, c.nic_pass, r.reservation_status FROM reservation_mst r LEFT JOIN customer_mst c\n" +
-                "ON r.cust_id = c.cust_id ";
+                "ON r.cust_id = c.cust_id WHERE r.reservation_id != 0 ";
 
         String finalizedSql = sqlCustom.concat(sql);
         String count = "SELECT count(*) FROM reservation_mst r LEFT JOIN customer_mst c\n" +
-                "ON r.cust_id = c.cust_id ".concat(sql);
+                "ON r.cust_id = c.cust_id WHERE r.reservation_id != 0 ".concat(sql);
 
 
         PageRequest pageable = PageRequest.of(filter.getPage(), filter.getSize());
@@ -224,7 +237,7 @@ public class ReservationServiceImpl implements ReservationService {
                     .total(reservationDtos.getTotalElements())
                     .build();
         } catch (Exception exception) {
-            exception.printStackTrace();
+             exception.printStackTrace();
             throw new RuntimeException(exception.getMessage());
         }
 

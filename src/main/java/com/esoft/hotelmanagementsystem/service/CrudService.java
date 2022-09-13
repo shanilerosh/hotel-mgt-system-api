@@ -11,5 +11,5 @@ public interface CrudService<T, ID> {
 
     Boolean update(ID id, T dto);
 
-    T fetchOne(ID id, T dto);
+    T fetchOne(ID id);
 }
