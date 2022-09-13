@@ -123,8 +123,15 @@ public class ReservationServiceImpl implements ReservationService {
                 .roomNumber(obj.getRoomNumber())
                 .roomRemark(obj.getRoomRemark())
                 .build()).collect(Collectors.toList());
-
         reservationDto.setRoomList(roomDtoList);
+
+        //customer data
+        CustomerMst customerMst = reservationMst.getCustomerMst();
+        CustomerDto customerDto = CustomerDto.builder().build();
+
+        BeanUtils.copyProperties(customerMst, customerDto);
+
+        reservationDto.setCustomerDto(customerDto);
         return reservationDto;
     }
 
