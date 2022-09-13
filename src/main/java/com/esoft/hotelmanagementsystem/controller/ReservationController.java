@@ -65,4 +65,29 @@ public class ReservationController {
         return ResponseEntity.ok().body(reservationService.fetchReservationData(reservationDto, status, true));
     }
 
+    /**
+     * API to check in a reservation
+     * @param reservationModifyDto
+     * @return
+     */
+    @PostMapping("/check-in")
+    @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header") })
+    public ResponseEntity<Boolean> checkInReservation(@RequestBody ReservationModifyDto reservationModifyDto) {
+        return ResponseEntity.ok().body(reservationService.checkInReservation(reservationModifyDto));
+    }
+
+
+    /**
+     * API to check out a reservation
+     * @param reservationModifyDto
+     * @return
+     */
+    @PostMapping("/check-out")
+    @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header") })
+    public ResponseEntity<Boolean> checkOutReservation(@RequestBody ReservationModifyDto reservationModifyDto) {
+        return ResponseEntity.ok().body(reservationService.checkOutReservation(reservationModifyDto));
+    }
+
+
+
 }

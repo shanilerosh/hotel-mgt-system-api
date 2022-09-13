@@ -109,10 +109,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public ReservationDto fetchOne(Long id) {
 
-        ReservationMst reservationMst = reservationRepository.findById(id)
-                .orElseThrow(() -> {
-                    throw new CommonException("Reservation Not Found");
-                });
+        ReservationMst reservationMst = getReservationMst(id);
 
         ReservationDto reservationDto = ReservationDto.builder().build();
         BeanUtils.copyProperties(reservationMst, reservationDto);
@@ -252,6 +249,52 @@ public class ReservationServiceImpl implements ReservationService {
             throw new RuntimeException(exception.getMessage());
         }
 
+    }
+
+    @Override
+    public Boolean checkInReservation(ReservationModifyDto reservationModifyDto) {
+
+        ReservationMst reservationMst = getReservationMst(reservationModifyDto);
+
+        if(ReservationStatus.OPEN != reservationMst.getReservationStatus()) {
+            throw new CommonException("In order to check in reservation must be in OPEN status (Credit Card Data should be provided)");
+        }
+
+        reservationMst.setReservationStatus(ReservationStatus.CHECKED_IN);
+        reservationMst.setActualCheckedInTime(reservationModifyDto.getApplDateTime());
+
+        reservationRepository.save(reservationMst);
+
+        return true;
+    }
+
+    private ReservationMst getReservationMst(ReservationModifyDto reservationModifyDto) {
+        return reservationRepository.findById(Long.valueOf(reservationModifyDto.getResevationId()))
+                .orElseThrow(() -> {
+                    throw new CommonException("Reservation Not Found");
+                });
+    }
+
+    private ReservationMst getReservationMst(Long id) {
+        return reservationRepository.findById(id)
+                .orElseThrow(() -> {
+                    throw new CommonException("Reservation Not Found");
+                });
+    }
+
+    public Boolean checkOutReservation(ReservationModifyDto reservationModifyDto) {
+
+        ReservationMst reservationMst = getReservationMst(reservationModifyDto);
+
+        if(ReservationStatus.CHECKED_IN != reservationMst.getReservationStatus()) {
+            throw new CommonException("In order to check out, customer should be already checked in");
+        }
+
+        reservationMst.setReservationStatus(ReservationStatus.CHECKED_OUT);
+        reservationMst.setActualCheckedOutTime(reservationModifyDto.getApplDateTime());
+
+        reservationRepository.save(reservationMst);
+        return true;
     }
 
     private void isCstomerDtoNotNull(ReservationDto reservationDto) {
