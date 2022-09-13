@@ -85,7 +85,6 @@ public final class ReflectUtil {
 
             } else if (fieldType == LocalDateTime.class) {
                 o = localDateTimeValue(value);
-
             } else if (fieldType.isEnum()) {
                 o = enumValue(value, fieldType);
 
@@ -141,7 +140,7 @@ public final class ReflectUtil {
     }
 
     private static LocalDateTime localDateTimeValue(String value) {
-        return LocalDateTime.parse(value, DateTimeFormatter.ofPattern("dd/M/yyyy HH:mm:ss"));
+        return LocalDateTime.parse(value.substring(0,16), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
 
