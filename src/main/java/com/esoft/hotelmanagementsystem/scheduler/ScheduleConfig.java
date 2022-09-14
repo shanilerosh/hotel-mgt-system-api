@@ -26,9 +26,9 @@ public class ScheduleConfig {
 
 
     /**
-     * Method to Ran Daily at 12 PM to cancel the reservation created without credit card
+     * Method to Ran Daily at 7 PM to cancel the reservation created without credit card
      */
-    @Scheduled(cron = "0 0 12 * * ?")
+    @Scheduled(cron = "0 0 7 * * ?")
     public void cancelCreditCardNonProvidedReservations() {
 
         try {
