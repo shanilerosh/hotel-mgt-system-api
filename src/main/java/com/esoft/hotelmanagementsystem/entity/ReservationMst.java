@@ -49,4 +49,6 @@ public class ReservationMst {
     private LocalDate expirationDate;
     private String cardCsv;
 
+    private String cancalationReason;
+
 }
