@@ -1,4 +1,4 @@
-package com.esoft.hotelmanagementsystem.controller.error;
+package com.esoft.hotelmanagementsystem.exception.handler;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
