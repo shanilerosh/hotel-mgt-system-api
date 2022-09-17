@@ -17,6 +17,7 @@ public class ErrorTranslator {
 
     @ExceptionHandler
     public ResponseEntity<ErrorDto> handleNoSuchElementException(CommonException ex, NativeWebRequest request) {
+        log.error(ex.getMessage(), ex);
         ErrorDto errorDto = new ErrorDto(HttpStatus.NOT_FOUND.value(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDto);
     }
@@ -31,7 +32,14 @@ public class ErrorTranslator {
     @ExceptionHandler
     public ResponseEntity<ErrorDto> handleNoSuchElementException(MethodArgumentNotValidException ex, NativeWebRequest request) {
         log.error(ex.getMessage(), ex);
-        ErrorDto errorDto = new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), "System Error. Please contact the administrator");
+
+        ErrorDto errorDto = new ErrorDto(HttpStatus.NOT_FOUND.value(), "System Error. Please contact the administrator");
+
+        //bind exception to the front end
+        ex.getAllErrors().stream().findFirst().ifPresent(obj -> {
+            errorDto.setMessage(obj.getDefaultMessage());
+        });
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDto);
     }
 }
