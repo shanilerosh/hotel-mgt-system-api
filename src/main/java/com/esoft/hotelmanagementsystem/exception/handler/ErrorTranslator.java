@@ -58,6 +58,6 @@ public class ErrorTranslator {
             errorDto.setMessage(obj.getDefaultMessage());
         });
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDto);
+        return ResponseEntity.status(errorDto.getStatus()).body(errorDto);
     }
 }
