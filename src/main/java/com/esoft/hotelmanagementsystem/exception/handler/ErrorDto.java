@@ -1,19 +1,14 @@
 package com.esoft.hotelmanagementsystem.exception.handler;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class ErrorDto {
 
     private int status;
     private String message;
-
-    public ErrorDto(int status, String message) {
-        this.status = status;
-        this.message = message;
-    }
 }
