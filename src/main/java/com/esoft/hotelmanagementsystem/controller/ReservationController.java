@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * @author ShanilErosh
  */
@@ -72,7 +74,7 @@ public class ReservationController {
      */
     @PostMapping("/check-in")
     @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header") })
-    public ResponseEntity<Boolean> checkInReservation(@RequestBody ReservationModifyDto reservationModifyDto) {
+    public ResponseEntity<Boolean> checkInReservation(@Valid @RequestBody ReservationModifyDto reservationModifyDto) {
         return ResponseEntity.ok().body(reservationService.checkInReservation(reservationModifyDto));
     }
 
@@ -84,7 +86,7 @@ public class ReservationController {
      */
     @PostMapping("/check-out")
     @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header") })
-    public ResponseEntity<Boolean> checkOutReservation(@RequestBody ReservationModifyDto reservationModifyDto) {
+    public ResponseEntity<Boolean> checkOutReservation(@Valid @RequestBody ReservationModifyDto reservationModifyDto) {
         return ResponseEntity.ok().body(reservationService.checkOutReservation(reservationModifyDto));
     }
 
@@ -95,7 +97,7 @@ public class ReservationController {
      */
     @PostMapping("/cancel")
     @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header") })
-    public ResponseEntity<Boolean> cancelReservation(@RequestBody ReservationCancelDto reservationCancelDto) {
+    public ResponseEntity<Boolean> cancelReservation(@Valid @RequestBody ReservationCancelDto reservationCancelDto) {
         return ResponseEntity.ok().body(reservationService.cancelReservation(reservationCancelDto));
     }
 
@@ -106,7 +108,7 @@ public class ReservationController {
      */
     @PostMapping("/credit-card/{reservationId}")
     @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header") })
-    public ResponseEntity<Boolean> updateCreditCardDetail(@PathVariable String reservationId, @RequestBody CreditCardDto creditCardDto) {
+    public ResponseEntity<Boolean> updateCreditCardDetail(@PathVariable String reservationId,@Valid @RequestBody CreditCardDto creditCardDto) {
         return ResponseEntity.ok().body(reservationService.updateCreditCardDetail(creditCardDto, reservationId));
     }
 

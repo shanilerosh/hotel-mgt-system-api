@@ -5,6 +5,7 @@ import com.esoft.hotelmanagementsystem.exception.CommonException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -22,6 +23,13 @@ public class ErrorTranslator {
 
     @ExceptionHandler
     public ResponseEntity<ErrorDto> handleNoSuchElementException(Exception ex, NativeWebRequest request) {
+        log.error(ex.getMessage(), ex);
+        ErrorDto errorDto = new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), "System Error. Please contact the administrator");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDto);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorDto> handleNoSuchElementException(MethodArgumentNotValidException ex, NativeWebRequest request) {
         log.error(ex.getMessage(), ex);
         ErrorDto errorDto = new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), "System Error. Please contact the administrator");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDto);
