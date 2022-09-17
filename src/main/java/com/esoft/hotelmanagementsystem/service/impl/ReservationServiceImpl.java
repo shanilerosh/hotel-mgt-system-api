@@ -300,11 +300,6 @@ public class ReservationServiceImpl implements ReservationService {
 
         ReservationMst reservationMst = getReservationMst(reservationCancelDto.getResevationId());
 
-        if(ReservationStatus.PENDING != reservationMst.getReservationStatus() || ReservationStatus.OPEN !=
-                reservationMst.getReservationStatus()) {
-            throw new CommonException("In order to cancel order should be either Open or Pending");
-        }
-
         reservationMst.setReservationStatus(ReservationStatus.CANCALLED);
         reservationMst.setCancalationReason(reservationCancelDto.getCancellationReason());
 
