@@ -21,9 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.yaml.snakeyaml.util.EnumUtils;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -294,6 +292,45 @@ public class ReservationServiceImpl implements ReservationService {
         reservationMst.setActualCheckedOutTime(reservationModifyDto.getApplDateTime());
 
         reservationRepository.save(reservationMst);
+        return true;
+    }
+
+    @Override
+    public Boolean cancelReservation(ReservationCancelDto reservationCancelDto) {
+
+        ReservationMst reservationMst = getReservationMst(reservationCancelDto.getResevationId());
+
+        if(ReservationStatus.PENDING != reservationMst.getReservationStatus() || ReservationStatus.OPEN !=
+                reservationMst.getReservationStatus()) {
+            throw new CommonException("In order to cancel order should be either Open or Pending");
+        }
+
+        reservationMst.setReservationStatus(ReservationStatus.CANCALLED);
+        reservationMst.setCancalationReason(reservationCancelDto.getCancellationReason());
+
+        reservationRepository.save(reservationMst);
+        return true;
+    }
+
+    @Override
+    public Boolean updateCreditCardDetail(CreditCardDto creditCardDto, String reservationId) {
+
+        ReservationMst reservationMst = getReservationMst(Long.valueOf(reservationId));
+
+        if(ReservationStatus.PENDING != reservationMst.getReservationStatus()) {
+            throw new CommonException("Reservation should be a pending reservation in order to update credit card data");
+        }
+
+        reservationMst.setReservationStatus(ReservationStatus.OPEN);
+
+        reservationMst.setCreditCardNumber(creditCardDto.getCreditCardNumber());
+        reservationMst.setExpirationDate(creditCardDto.getExpirationDate());
+        reservationMst.setCardCsv(creditCardDto.getCardCsv());
+
+        reservationMst.setCreditCardApplicable(true);
+
+        reservationRepository.save(reservationMst);
+
         return true;
     }
 

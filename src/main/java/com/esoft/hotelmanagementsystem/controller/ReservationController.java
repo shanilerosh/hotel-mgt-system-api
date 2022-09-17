@@ -88,6 +88,27 @@ public class ReservationController {
         return ResponseEntity.ok().body(reservationService.checkOutReservation(reservationModifyDto));
     }
 
+    /**
+     * API to cancel reservation
+     * @param reservationCancelDto
+     * @return
+     */
+    @PostMapping("/cancel")
+    @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header") })
+    public ResponseEntity<Boolean> cancelReservation(@RequestBody ReservationCancelDto reservationCancelDto) {
+        return ResponseEntity.ok().body(reservationService.cancelReservation(reservationCancelDto));
+    }
+
+    /**
+     * API to Update credit card details
+     *
+     * @return
+     */
+    @PostMapping("/credit-card/{reservationId}")
+    @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string", paramType = "header") })
+    public ResponseEntity<Boolean> updateCreditCardDetail(@PathVariable String reservationId, @RequestBody CreditCardDto creditCardDto) {
+        return ResponseEntity.ok().body(reservationService.updateCreditCardDetail(creditCardDto, reservationId));
+    }
 
 
 }

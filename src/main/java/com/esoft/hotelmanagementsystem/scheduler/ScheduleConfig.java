@@ -1,6 +1,5 @@
 package com.esoft.hotelmanagementsystem.scheduler;
 
-import com.esoft.hotelmanagementsystem.entity.ReservationMst;
 import com.esoft.hotelmanagementsystem.enums.ReservationStatus;
 import com.esoft.hotelmanagementsystem.repo.ReservationRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +9,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @author ShanilErosh

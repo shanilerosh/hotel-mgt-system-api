@@ -2,8 +2,6 @@ package com.esoft.hotelmanagementsystem.service;
 
 import com.esoft.hotelmanagementsystem.dto.*;
 
-import java.util.List;
-
 /**
  * @author ShanilErosh
  */
@@ -17,4 +15,8 @@ public interface ReservationService extends CrudService<ReservationDto, Long>{
     Boolean checkInReservation(ReservationModifyDto reservationModifyDto);
 
     Boolean checkOutReservation(ReservationModifyDto reservationModifyDto);
+
+    Boolean cancelReservation(ReservationCancelDto reservationCancelDto);
+
+    Boolean updateCreditCardDetail(CreditCardDto creditCardDto, String reservationId);
 }
