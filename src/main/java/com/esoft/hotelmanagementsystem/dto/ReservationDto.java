@@ -51,6 +51,8 @@ public class ReservationDto implements Serializable {
     private String nicPass;
     private String status;
 
+    private String cancalationReason;
+
 
 
 }
