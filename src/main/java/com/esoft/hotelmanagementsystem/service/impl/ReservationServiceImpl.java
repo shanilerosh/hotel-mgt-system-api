@@ -211,7 +211,7 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
 
-        String sqlCustom = "SELECT r.actual_checked_in_time, r.actual_checked_out_time, r.promised_checked_in_time, r.promised_checked_out_time, r.reservation_id, r.total_amount, c.customer_name, c.country, c.nic_pass, r.reservation_status,r.cancalation_reason r. FROM reservation_mst r LEFT JOIN customer_mst c\n" +
+        String sqlCustom = "SELECT r.actual_checked_in_time, r.actual_checked_out_time, r.promised_checked_in_time, r.promised_checked_out_time, r.reservation_id, r.total_amount, c.customer_name, c.country, c.nic_pass, r.reservation_status,r.cancalation_reason FROM reservation_mst r LEFT JOIN customer_mst c\n" +
                 "ON r.cust_id = c.cust_id WHERE r.reservation_id != 0 ";
 
         String finalizedSql = sqlCustom.concat(sql);
