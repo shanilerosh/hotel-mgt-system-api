@@ -24,4 +24,10 @@ public class PaymentCalculatedDto implements Serializable {
     private long noOfDaysApplicable;
 
     private List<RoomWisePrice> roomWisePrices;
+
+    private BigDecimal laundryCharges;
+    private BigDecimal barCharges;
+    private BigDecimal telephoneCharges;
+    private BigDecimal clubFacility;
+    private BigDecimal ketCharges;
 }
