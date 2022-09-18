@@ -1,5 +1,6 @@
 package com.esoft.hotelmanagementsystem.dto;
 
+import com.esoft.hotelmanagementsystem.enums.PaymentType;
 import lombok.*;
 
 import java.io.Serializable;
@@ -25,9 +26,13 @@ public class PaymentCalculatedDto implements Serializable {
 
     private List<RoomWisePrice> roomWisePrices;
 
+    //additional Charges
     private BigDecimal laundryCharges;
     private BigDecimal barCharges;
     private BigDecimal telephoneCharges;
     private BigDecimal clubFacility;
     private BigDecimal ketCharges;
+
+    //payment Type
+    private PaymentType paymentType;
 }
