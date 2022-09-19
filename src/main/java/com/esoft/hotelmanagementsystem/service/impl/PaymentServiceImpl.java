@@ -4,6 +4,7 @@ import com.esoft.hotelmanagementsystem.dto.*;
 import com.esoft.hotelmanagementsystem.entity.*;
 import com.esoft.hotelmanagementsystem.enums.HouseKeepingStatus;
 import com.esoft.hotelmanagementsystem.enums.PaymentStatus;
+import com.esoft.hotelmanagementsystem.enums.ReservationStatus;
 import com.esoft.hotelmanagementsystem.exception.CommonException;
 import com.esoft.hotelmanagementsystem.repo.*;
 import com.esoft.hotelmanagementsystem.service.PaymentService;
@@ -114,9 +115,13 @@ public class PaymentServiceImpl implements PaymentService {
         paymentMst.setPaypalPayerId(payerId);
         paymentMst.setPaypalPaymentId(paymentId);
 
-        paymentMst.setPaymentStatus(PaymentStatus.FAILED);
+        paymentMst.setPaymentStatus(paymentStatus);
 
         paymentRepository.save(paymentMst);
+
+        reservationMst.setReservationStatus(ReservationStatus.COMPLETED);
+
+        reservationRepository.save(reservationMst);
 
         return true;
     }
