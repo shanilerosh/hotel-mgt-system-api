@@ -5,6 +5,7 @@ import com.esoft.hotelmanagementsystem.entity.CustomerMst;
 import com.esoft.hotelmanagementsystem.entity.ReservationMst;
 import com.esoft.hotelmanagementsystem.entity.Room;
 import com.esoft.hotelmanagementsystem.entity.UserMst;
+import com.esoft.hotelmanagementsystem.enums.PaymentStatus;
 import com.esoft.hotelmanagementsystem.enums.ReservationStatus;
 import com.esoft.hotelmanagementsystem.exception.CommonException;
 import com.esoft.hotelmanagementsystem.repo.*;
@@ -44,6 +45,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final RoomRepository roomRepo;
     private final RoomImgRepository roomImgRepo;
     private final ReservationRepository reservationRepository;
+    private final PaymentRepository paymentRepository;
     private final CustomerRepo customerRepo;
     private final CustomerService customerService;
     private final UserService userService;
@@ -130,6 +132,16 @@ public class ReservationServiceImpl implements ReservationService {
         BeanUtils.copyProperties(customerMst, customerDto);
 
         reservationDto.setCustomerDto(customerDto);
+
+        //set payment data is exist
+        paymentRepository.
+                findByReservationMstAndPaymentStatus(reservationMst, PaymentStatus.SUCCESS)
+                .ifPresent(c -> {
+                    reservationDto.setPaymentAmount(c.getPaymentAmount());
+                    reservationDto.setPaymentType(c.getPaymentType().toString());
+                    reservationDto.setPaymentDate(c.getPaymentDateTime());
+                });
+
         return reservationDto;
     }
 

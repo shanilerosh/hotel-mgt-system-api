@@ -53,6 +53,11 @@ public class ReservationDto implements Serializable {
 
     private String cancalationReason;
 
+    //Payment Related Data
+    private String paymentType;
+    private BigDecimal paymentAmount;
+    private LocalDateTime paymentDate;
+
 
 
 }
