@@ -92,7 +92,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         PaymentMst paymentMst = paymentMstBuilder();
 
-        BeanUtils.copyProperties(paymentDto, paymentMst,"paymentType");
+        BeanUtils.copyProperties(paymentDto, paymentMst,"paymentType","paymentDateTime");
 
         paymentMst.setPaymentType(paymentDto.getPaymentType());
         paymentMst.setReservationMst(reservationMst);
