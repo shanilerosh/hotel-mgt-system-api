@@ -81,7 +81,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Boolean createPaymentInvoiceRecord(PaymentDto paymentDto) {
 
-        ReservationMst reservationMst = getReservationMst(paymentDto.getPaymentId());
+        ReservationMst reservationMst = getReservationMst(Long.valueOf(paymentDto.getReservationId()));
 
         //validate duplicates
         paymentRepository.findByReservationMstAndPaymentStatus(reservationMst, PaymentStatus.SUCCESS)
