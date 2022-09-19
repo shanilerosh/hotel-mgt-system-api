@@ -33,7 +33,7 @@ public class ScheduleConfig {
             log.info("Credit card cancellation sync started on ".concat(LocalDateTime.now().toString()));
 
             reservationRepository.findAllByReservationStatus(ReservationStatus.OPEN).forEach(obj -> {
-                obj.setReservationStatus(ReservationStatus.CANCALLED);
+                obj.setReservationStatus(ReservationStatus.CANCELED);
                 obj.setCancalationReason("No Credit card provided. System automatically cancelled the reservation");
                 reservationRepository.save(obj);
             });

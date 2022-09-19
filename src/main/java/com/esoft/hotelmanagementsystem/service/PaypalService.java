@@ -2,11 +2,12 @@ package com.esoft.hotelmanagementsystem.service;
 
 import com.esoft.hotelmanagementsystem.dto.PaymentCalculatedDto;
 import com.esoft.hotelmanagementsystem.dto.PaypalDto;
+import com.paypal.base.rest.PayPalRESTException;
 
 /**
  * @author ShanilErosh
  */
-public interface PaymentService {
+public interface PaypalService {
 
-    PaymentCalculatedDto getPaymentDetail(String reservationId);
+    String createPayment(PaypalDto paypalDto) throws PayPalRESTException;
 }

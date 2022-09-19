@@ -301,7 +301,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         ReservationMst reservationMst = getReservationMst(reservationCancelDto.getResevationId());
 
-        reservationMst.setReservationStatus(ReservationStatus.CANCALLED);
+        reservationMst.setReservationStatus(ReservationStatus.CANCELED);
         reservationMst.setCancalationReason(reservationCancelDto.getCancellationReason());
 
         reservationRepository.save(reservationMst);
