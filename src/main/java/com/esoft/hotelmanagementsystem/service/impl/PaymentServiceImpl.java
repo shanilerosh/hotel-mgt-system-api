@@ -1,11 +1,9 @@
 package com.esoft.hotelmanagementsystem.service.impl;
 
 import com.esoft.hotelmanagementsystem.dto.*;
-import com.esoft.hotelmanagementsystem.entity.ReservationMst;
-import com.esoft.hotelmanagementsystem.entity.Room;
-import com.esoft.hotelmanagementsystem.entity.RoomImg;
-import com.esoft.hotelmanagementsystem.entity.RoomType;
+import com.esoft.hotelmanagementsystem.entity.*;
 import com.esoft.hotelmanagementsystem.enums.HouseKeepingStatus;
+import com.esoft.hotelmanagementsystem.enums.PaymentStatus;
 import com.esoft.hotelmanagementsystem.exception.CommonException;
 import com.esoft.hotelmanagementsystem.repo.*;
 import com.esoft.hotelmanagementsystem.service.PaymentService;
@@ -17,6 +15,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +42,7 @@ import java.util.stream.Collectors;
 public class PaymentServiceImpl implements PaymentService {
 
     private final ReservationRepository reservationRepository;
+    private final PaymentRepository paymentRepository;
 
     @Override
     public PaymentCalculatedDto getPaymentDetail(String reservationId) {
@@ -73,6 +75,57 @@ public class PaymentServiceImpl implements PaymentService {
         return PaymentCalculatedDto.builder().checkedOutTime(actualCheckedOutTime).checkInTIme(actualCheckedInTime)
                 .totalPayable(totalAmount).noOfDaysApplicable(stayedDays).totalPayable(totalAmount)
                 .roomWisePrices(roomWisePrices).build();
+    }
+
+    //create payment invoice record in the db
+    @Override
+    public Boolean createPaymentInvoiceRecord(PaymentDto paymentDto) {
+
+        ReservationMst reservationMst = getReservationMst(paymentDto.getPaymentId());
+
+        //validate duplicates
+        paymentRepository.findByReservationMstAndPaymentStatus(reservationMst, PaymentStatus.SUCCESS)
+                .ifPresent(c-> {
+                    throw new CommonException("A successful payment has been already created for this reservation. Please try again");
+                });
+
+        PaymentMst paymentMst = paymentMstBuilder();
+
+        BeanUtils.copyProperties(paymentDto, paymentMst,"paymentType");
+
+        paymentMst.setPaymentType(paymentDto.getPaymentType());
+        paymentMst.setReservationMst(reservationMst);
+
+        paymentRepository.save(paymentMst);
+
+        return true;
+    }
+
+    @Override
+    public Boolean finalizePaymentStatus(String reservationId, String paymentId, String payerId, PaymentStatus paymentStatus) {
+
+        ReservationMst reservationMst = getReservationMst(Long.valueOf(reservationId));
+
+        PaymentMst paymentMst = paymentRepository.findByReservationMstAndPaymentStatus(reservationMst, PaymentStatus.OPEN)
+                .orElseThrow(() -> {
+                    throw new CommonException("Payment Record not found please try again");
+                });
+
+        paymentMst.setPaypalPayerId(payerId);
+        paymentMst.setPaypalPaymentId(paymentId);
+
+        paymentMst.setPaymentStatus(PaymentStatus.FAILED);
+
+        paymentRepository.save(paymentMst);
+
+        return true;
+    }
+
+    private PaymentMst paymentMstBuilder() {
+        //Todo -Add logged in user data
+        return PaymentMst.builder().paymentDateTime(LocalDateTime.now())
+                .paymentStatus(PaymentStatus.OPEN)
+                .build();
     }
 
     private ReservationMst getReservationMst(Long id) {

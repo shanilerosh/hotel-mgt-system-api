@@ -10,4 +10,6 @@ import com.paypal.base.rest.PayPalRESTException;
 public interface PaypalService {
 
     String createPayment(PaypalDto paypalDto) throws PayPalRESTException;
+
+    void executePayment(String reservationId, String paymentId, String payerId) throws PayPalRESTException;
 }

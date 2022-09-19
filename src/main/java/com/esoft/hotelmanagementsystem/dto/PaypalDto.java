@@ -25,5 +25,8 @@ public class PaypalDto implements Serializable {
     private String intent;
     @NotBlank(message = "Description is compulsory")
     private String description;
+    @NotBlank(message = "Reservation Id is compulsory")
+    private String reservationId;
+
 
 }

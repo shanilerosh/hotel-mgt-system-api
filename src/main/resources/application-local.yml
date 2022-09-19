@@ -50,8 +50,10 @@ queue:
 
 paypal:
   mode: sandbox
-  success-url: http://localhost:3000/payment-sucess
-  cancel-url: http://localhost:3000/payment-failure
+  success-url: http://localhost:9008/api/payment/payment-success/
+  cancel-url: http://localhost:9008/api/payment/payment-failure/
+  success-redirect-url: http://localhost:3000/payment-sucess
+  cancel-redirect-url: http://localhost:3000/payment-failure
   client:
     id: AbBWnirEUGV0GSVjg-KUTdhvd6fFrc5HV4yMNgbu5aAqbpaxVj_scQ0X9nAYY70I6w6jLBk2rWKeLEUF
     secret: EPX8KEobm-O4V9lK3da3gaQVemXU97JyYnroypEIek5gJu0B4gT5ETBoYV2ORT8-6vD2pJvRz9iJPSl7
