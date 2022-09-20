@@ -99,6 +99,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         BeanUtils.copyProperties(paymentDto, paymentMst,"paymentType","paymentDateTime");
 
+        paymentMst.setPaymentType(paymentDto.getPaymentType());
         paymentMst.setReservationMst(reservationMst);
 
         paymentRepository.save(paymentMst);
@@ -134,19 +135,10 @@ public class PaymentServiceImpl implements PaymentService {
     public Boolean createCashPayment(PaymentDto paymentDto) {
 
 
-        ReservationMst reservationMst = getReservationMst(Long.valueOf(paymentDto.getReservationId()));
+        paymentDto.setPaymentType(PaymentType.CASH);
+        paymentDto.setIsManualPayment(true);
 
-        PaymentMst paymentMst = paymentMstBuilder();
-
-        BeanUtils.copyProperties(paymentDto, paymentMst,"paymentType","paymentDateTime");
-
-        paymentMst.setPaymentType(paymentDto.getPaymentType());
-        paymentMst.setReservationMst(reservationMst);
-
-        paymentMst.setPaymentType(PaymentType.CASH);
-        paymentMst.setPaymentStatus(PaymentStatus.OPEN);
-
-        paymentRepository.save(paymentMst);
+        createPaymentInvoiceRecord(paymentDto);
 
         //finalize payment
         finalizePaymentStatus(paymentDto.getReservationId(),null, null, PaymentStatus.SUCCESS);
