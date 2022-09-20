@@ -144,9 +144,12 @@ public class PaymentServiceImpl implements PaymentService {
         paymentMst.setReservationMst(reservationMst);
 
         paymentMst.setPaymentType(PaymentType.CASH);
-        paymentMst.setPaymentStatus(PaymentStatus.SUCCESS);
+        paymentMst.setPaymentStatus(PaymentStatus.OPEN);
 
         paymentRepository.save(paymentMst);
+
+        //finalize payment
+        finalizePaymentStatus(paymentDto.getReservationId(),null, null, PaymentStatus.SUCCESS);
 
         return true;
     }
