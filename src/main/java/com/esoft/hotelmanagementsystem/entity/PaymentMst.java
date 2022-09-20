@@ -40,4 +40,11 @@ public class PaymentMst {
     @JoinColumn(name = "reservation_id", nullable = false)
     private ReservationMst reservationMst;
 
+
+    private BigDecimal laundryCharges;
+    private BigDecimal barCharges;
+    private BigDecimal telephoneCharges;
+    private BigDecimal clubFacility;
+    private BigDecimal ketCharges;
+
 }

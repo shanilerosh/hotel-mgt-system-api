@@ -92,4 +92,9 @@ public class PaymentController {
         response.sendRedirect(cancelUrl);
     }
 
+    @GetMapping(value = "/payment-invoice/{reservationId}")
+    public ResponseEntity<String> downloadPaymentInvoice(@PathVariable String reservationId) {
+        return ResponseEntity.ok(paymentService.downloadPaymentInvoice(reservationId));
+    }
+
 }

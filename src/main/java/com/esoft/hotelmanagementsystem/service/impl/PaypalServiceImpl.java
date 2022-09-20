@@ -99,6 +99,11 @@ public class PaypalServiceImpl implements PaypalService {
         return PaymentDto.builder().paymentAmount(paypalDto.getTotal())
                 .isManualPayment(true).reservationId(paypalDto.getReservationId())
                 .paymentType(PaymentType.CREDIT_CARD)
+                 .laundryCharges(paypalDto.getLaundryCharges())
+                         .barCharges(paypalDto.getBarCharges())
+                 .telephoneCharges(paypalDto.getTelephoneCharges())
+                         .clubFacility(paypalDto.getClubFacility())
+                 .ketCharges(paypalDto.getKetCharges())
                 .build();
     }
 

@@ -29,4 +29,10 @@ public class PaymentDto implements Serializable {
     private LocalDateTime paymentDateTime;
     @NotNull(message = "Reservation Id is compulsory")
     private String reservationId;
+
+    private BigDecimal laundryCharges;
+    private BigDecimal barCharges;
+    private BigDecimal telephoneCharges;
+    private BigDecimal clubFacility;
+    private BigDecimal ketCharges;
 }

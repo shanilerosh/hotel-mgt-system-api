@@ -29,4 +29,12 @@ public class PaypalDto implements Serializable {
     private String reservationId;
 
 
+    //additional charges
+    private BigDecimal laundryCharges;
+    private BigDecimal barCharges;
+    private BigDecimal telephoneCharges;
+    private BigDecimal clubFacility;
+    private BigDecimal ketCharges;
+
+
 }
