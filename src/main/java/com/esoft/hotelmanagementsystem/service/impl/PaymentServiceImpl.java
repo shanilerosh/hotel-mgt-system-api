@@ -4,6 +4,7 @@ import com.esoft.hotelmanagementsystem.dto.*;
 import com.esoft.hotelmanagementsystem.entity.*;
 import com.esoft.hotelmanagementsystem.enums.HouseKeepingStatus;
 import com.esoft.hotelmanagementsystem.enums.PaymentStatus;
+import com.esoft.hotelmanagementsystem.enums.PaymentType;
 import com.esoft.hotelmanagementsystem.enums.ReservationStatus;
 import com.esoft.hotelmanagementsystem.exception.CommonException;
 import com.esoft.hotelmanagementsystem.repo.*;
@@ -78,7 +79,11 @@ public class PaymentServiceImpl implements PaymentService {
                 .roomWisePrices(roomWisePrices).build();
     }
 
-    //create payment invoice record in the db
+    /**
+     * Create cash payment invoice record in the db
+     * @param paymentDto
+     * @return
+     */
     @Override
     public Boolean createPaymentInvoiceRecord(PaymentDto paymentDto) {
 
@@ -94,8 +99,9 @@ public class PaymentServiceImpl implements PaymentService {
 
         BeanUtils.copyProperties(paymentDto, paymentMst,"paymentType","paymentDateTime");
 
-        paymentMst.setPaymentType(paymentDto.getPaymentType());
+        paymentMst.setPaymentType(PaymentType.CASH);
         paymentMst.setReservationMst(reservationMst);
+        paymentMst.setPaymentStatus(PaymentStatus.SUCCESS);
 
         paymentRepository.save(paymentMst);
 
@@ -122,6 +128,25 @@ public class PaymentServiceImpl implements PaymentService {
         reservationMst.setReservationStatus(ReservationStatus.COMPLETED);
 
         reservationRepository.save(reservationMst);
+
+        return true;
+    }
+
+    @Override
+    public Boolean createCashPayment(PaymentDto paymentDto) {
+
+
+        ReservationMst reservationMst = getReservationMst(Long.valueOf(paymentDto.getReservationId()));
+
+        PaymentMst paymentMst = paymentMstBuilder();
+
+        BeanUtils.copyProperties(paymentDto, paymentMst,"paymentType","paymentDateTime");
+
+        paymentMst.setPaymentType(paymentDto.getPaymentType());
+        paymentMst.setReservationMst(reservationMst);
+
+        paymentMst.setPaymentStatus(PaymentStatus.SUCCESS);
+        paymentRepository.save(paymentMst);
 
         return true;
     }

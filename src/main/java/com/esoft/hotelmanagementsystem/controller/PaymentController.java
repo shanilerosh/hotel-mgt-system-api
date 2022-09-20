@@ -1,6 +1,7 @@
 package com.esoft.hotelmanagementsystem.controller;
 
 import com.esoft.hotelmanagementsystem.dto.PaymentCalculatedDto;
+import com.esoft.hotelmanagementsystem.dto.PaymentDto;
 import com.esoft.hotelmanagementsystem.dto.PaypalDto;
 import com.esoft.hotelmanagementsystem.enums.PaymentStatus;
 import com.esoft.hotelmanagementsystem.service.PaymentService;
@@ -53,6 +54,20 @@ public class PaymentController {
         return ResponseEntity.ok(paypalService.createPayment(paypalDto));
     }
 
+    @PostMapping("/cash-pay")
+    public ResponseEntity<Boolean> createCashPayment(@Valid @RequestBody PaymentDto paymentDto) throws PayPalRESTException {
+        return ResponseEntity.ok(paymentService.createCashPayment(paymentDto));
+    }
+
+    /**
+     * API to handle paypal success callback
+     * @param reservationId
+     * @param paymentId
+     * @param payerId
+     * @param response
+     * @throws IOException
+     * @throws PayPalRESTException
+     */
     @GetMapping(value = "/payment-success/{reservationId}")
     public void handlePaypalSuccess(@PathVariable String reservationId, @RequestParam("paymentId") String paymentId,
                                                                     @RequestParam("PayerID") String payerId, HttpServletResponse response) throws IOException, PayPalRESTException {
@@ -62,6 +77,13 @@ public class PaymentController {
         response.sendRedirect(successUrl);
     }
 
+    /**
+     * APi to handle paypal failure callback
+     * @param reservationId
+     * @param response
+     * @throws IOException
+     * @throws PayPalRESTException
+     */
     @GetMapping(value = "/payment-failure/{reservationId}")
     public void handlePaypalFailure(@PathVariable String reservationId,HttpServletResponse response) throws IOException, PayPalRESTException {
 

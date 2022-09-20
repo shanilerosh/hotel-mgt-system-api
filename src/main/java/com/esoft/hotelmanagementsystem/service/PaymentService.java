@@ -15,4 +15,6 @@ public interface PaymentService {
     Boolean createPaymentInvoiceRecord(PaymentDto paymentDto);
 
     Boolean finalizePaymentStatus(String reservationId, String paymentId, String payerId, PaymentStatus paymentStatus);
+
+    Boolean createCashPayment(PaymentDto paymentDto);
 }
