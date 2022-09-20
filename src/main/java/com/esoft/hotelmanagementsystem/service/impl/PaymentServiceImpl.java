@@ -99,9 +99,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         BeanUtils.copyProperties(paymentDto, paymentMst,"paymentType","paymentDateTime");
 
-        paymentMst.setPaymentType(PaymentType.CASH);
         paymentMst.setReservationMst(reservationMst);
-        paymentMst.setPaymentStatus(PaymentStatus.SUCCESS);
 
         paymentRepository.save(paymentMst);
 
@@ -145,7 +143,9 @@ public class PaymentServiceImpl implements PaymentService {
         paymentMst.setPaymentType(paymentDto.getPaymentType());
         paymentMst.setReservationMst(reservationMst);
 
+        paymentMst.setPaymentType(PaymentType.CASH);
         paymentMst.setPaymentStatus(PaymentStatus.SUCCESS);
+
         paymentRepository.save(paymentMst);
 
         return true;
