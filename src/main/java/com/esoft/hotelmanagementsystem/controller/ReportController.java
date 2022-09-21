@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * @author ShanilErosh
  */
@@ -18,7 +20,7 @@ public class ReportController {
     private final ReportService reportService;
 
     @PostMapping("/")
-    public ResponseEntity<CommonResponseDto<ReportCommonResponseDto>> createCustomer(@RequestBody ReportFilterDto filterDto) {
+    public ResponseEntity<CommonResponseDto<ReportCommonResponseDto>> createCustomer(@Valid @RequestBody ReportFilterDto filterDto) {
             return ResponseEntity.ok().body(reportService.generateReport(filterDto));
     }
 
