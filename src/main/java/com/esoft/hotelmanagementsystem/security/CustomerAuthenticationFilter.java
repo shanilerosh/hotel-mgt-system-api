@@ -2,10 +2,15 @@ package com.esoft.hotelmanagementsystem.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.esoft.hotelmanagementsystem.entity.UserMst;
+import com.esoft.hotelmanagementsystem.exception.CommonException;
+import com.esoft.hotelmanagementsystem.repo.CustomerRepo;
+import com.esoft.hotelmanagementsystem.repo.UserRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jdk.jfr.ContentType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +28,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -32,7 +38,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CustomerAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserRepo userRepo;
+    @Autowired
+    private CustomerRepo customerRepo;
+
+    public CustomerAuthenticationFilter(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
+
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -69,9 +85,20 @@ public class CustomerAuthenticationFilter extends UsernamePasswordAuthentication
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
 
-       Map<String, String> tokens = new HashMap<>();
+        UserMst userMst = userRepo.findByUsername(user.getUsername())
+                .orElseThrow(() -> {
+                    throw new CommonException("User not found");
+                });
+
+
+        Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", accessToken);
         tokens.put("refresh_token", refreshToken);
+
+
+        customerRepo.findByUserMst(userMst).ifPresent(c -> {
+            tokens.put("nic", c.getNicPass());
+        });
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
