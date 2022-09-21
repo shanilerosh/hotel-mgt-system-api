@@ -1,5 +1,7 @@
 package com.esoft.hotelmanagementsystem.security;
 
+import com.esoft.hotelmanagementsystem.repo.CustomerRepo;
+import com.esoft.hotelmanagementsystem.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +28,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserRepo userRepo;
+    private final CustomerRepo customerRepo;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -36,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/payment/payment-success/**","/api/payment/payment-failure/**").permitAll();
         http.authorizeRequests().antMatchers( "/api/rooms/**").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
-        http.addFilter(new CustomerAuthenticationFilter(authenticationManagerBean()));
+        http.addFilter(new CustomerAuthenticationFilter(authenticationManagerBean(),userRepo,customerRepo));
         http.addFilterBefore(new CustomerAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
 
