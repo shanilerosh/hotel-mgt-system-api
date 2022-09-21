@@ -175,7 +175,7 @@ public class PaymentServiceImpl implements PaymentService {
         paymentString.append("<br>" + "<p style=\"padding: 5px;\">Customer : &emsp;&emsp;&emsp;:&emsp;" + reservationMst.getCustomerMst().getCustomerName() + "</p>" + "<p style=\"padding: 5px;\">Date&emsp;&emsp;:&emsp;" + paymentMst.getPaymentDateTime() + "</p>" + "<p style=\"padding: 5px;\">Customer Address&emsp;:&emsp;" + reservationMst.getCustomerMst().getAddress() + "</p>" + "<hr>" + "<br>");
 
         paymentString.append("<p style=\"padding: 5px;\">Total Amount &emsp;&emsp;&emsp;:&emsp; - " + Utility.formatCurrency(reservationMst.getTotalAmount()) + "</p>");
-        paymentString.append("<p style=\"padding: 5px;\">Paid In &emsp;&emsp;&emsp;:&emsp; - " + (paymentMst.getPaymentType().equals(PaymentType.CASH) ? "Cash" : "Crdit Card")
+        paymentString.append("<p style=\"padding: 5px;\">Paid In &emsp;&emsp;&emsp;:&emsp; - " + (paymentMst.getPaymentType().equals(PaymentType.CASH) ? "Cash" : "Credit Card")
                 + "</p>");
 
         if(paymentMst.getPaymentType().equals(PaymentType.CREDIT_CARD)) {

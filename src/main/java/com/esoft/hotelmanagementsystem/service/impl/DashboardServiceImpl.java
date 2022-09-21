@@ -2,76 +2,89 @@ package com.esoft.hotelmanagementsystem.service.impl;
 
 import com.esoft.hotelmanagementsystem.dto.DashboardDto;
 import com.esoft.hotelmanagementsystem.dto.DashboardReservationDataDto;
+import com.esoft.hotelmanagementsystem.entity.ReservationMst;
+import com.esoft.hotelmanagementsystem.repo.RepositoryCustom;
+import com.esoft.hotelmanagementsystem.repo.ReservationRepository;
 import com.esoft.hotelmanagementsystem.service.DashboardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class DashboardServiceImpl implements DashboardService {
+
+    private final ReservationRepository reservationRepository;
+    private final RepositoryCustom customRepo;
+
+
+    public BigDecimal getTotalRevenue() {
+        return reservationRepository.findAll().stream()
+                .filter(obj -> null != obj.getActualCheckedOutTime() && obj.getActualCheckedOutTime().toLocalDate().equals(LocalDate.now()))
+                .map(ReservationMst::getTotalAmount).
+                reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public Long getTotalCheckins() {
+        return reservationRepository.findAll().stream()
+                .filter(obj -> null != obj.getActualCheckedInTime() && obj.getActualCheckedInTime().toLocalDate().equals(LocalDate.now()))
+                .count();
+    }
+
+    public Long getTotalReservations() {
+        return reservationRepository.findAll().stream()
+                .filter(obj -> null != obj.getCreatedDateTime() && obj.getCreatedDateTime().toLocalDate().equals(LocalDate.now()))
+                .count();
+    }
+
+    public Long getPromisedReservationToday() {
+        return reservationRepository.findAll().stream()
+                .filter(obj -> null != obj.getPromisedCheckedInTime() && obj.getPromisedCheckedInTime().toLocalDate().equals(LocalDate.now()) &&
+                        null == obj.getActualCheckedInTime())
+                .count();
+    }
+
+    public List<DashboardReservationDataDto> getTodayExpectedCheckinList() {
+        return reservationRepository.findAll().stream().filter(obj -> null != obj.getPromisedCheckedInTime() && obj.getPromisedCheckedInTime().toLocalDate().equals(LocalDate.now()) && null == obj.getActualCheckedInTime())
+                .map(obj -> DashboardReservationDataDto.builder()
+                        .reservationId(obj.getReservationId())
+                        .customerName(obj.getCustomerMst().getCustomerName())
+                        .contactNo(obj.getCustomerMst().getContactNumber())
+                        .promisedCheckInOutDateTime(obj.getPromisedCheckedOutTime())
+                        .build()).collect(Collectors.toList());
+
+    }
+
+    public List<DashboardReservationDataDto> getTodayExpectedChecOutList() {
+        return reservationRepository.findAll().stream().filter(obj -> null != obj.getPromisedCheckedOutTime() && obj.getPromisedCheckedOutTime().toLocalDate().equals(LocalDate.now()) && null == obj.getActualCheckedOutTime())
+                .map(obj -> DashboardReservationDataDto.builder()
+                        .reservationId(obj.getReservationId())
+                        .customerName(obj.getCustomerMst().getCustomerName())
+                        .contactNo(obj.getCustomerMst().getContactNumber())
+                        .promisedCheckInOutDateTime(obj.getPromisedCheckedOutTime())
+                        .build()).collect(Collectors.toList());
+    }
+
+
     @Override
     public DashboardDto fetchDashboardData() {
         DashboardDto dashboardDto = new DashboardDto();
 
-        dashboardDto.setTotalRevenueToday(new BigDecimal(180000));
-        dashboardDto.setTotalCheckinsToday(18);
-        dashboardDto.setNewReservationsToday(10);
-        dashboardDto.setDueCheckinsToday(7);
+        dashboardDto.setTotalRevenueToday(getTotalRevenue());
+        dashboardDto.setTotalCheckinsToday(getTotalCheckins());
+        dashboardDto.setNewReservationsToday(getTotalReservations());
+        dashboardDto.setDueCheckinsToday(getPromisedReservationToday());
+
+        //TODO - Implement this if time exist
         dashboardDto.setAvailableRooms(45);
         dashboardDto.setTotalActiveGuests(200);
 
-        List<DashboardReservationDataDto> checkInList = new ArrayList<>();
-        List<DashboardReservationDataDto> checkOutList = new ArrayList<>();
-
-        DashboardReservationDataDto arrivalone = new DashboardReservationDataDto();
-        arrivalone.setReservationId(1);
-        arrivalone.setCustomerName("abc alwis");
-        arrivalone.setContactNo("0774585695");
-        arrivalone.setPromisedCheckInOutDateTime(LocalDateTime.now());
-
-        DashboardReservationDataDto arrivaltwo = new DashboardReservationDataDto();
-        arrivaltwo.setReservationId(1);
-        arrivaltwo.setCustomerName("basil");
-        arrivaltwo.setContactNo("0774585695");
-        arrivaltwo.setPromisedCheckInOutDateTime(LocalDateTime.now());
-
-        DashboardReservationDataDto arrivalthree = new DashboardReservationDataDto();
-        arrivalthree.setReservationId(1);
-        arrivalthree.setCustomerName("Pasan silva");
-        arrivalthree.setContactNo("0774585695");
-        arrivalthree.setPromisedCheckInOutDateTime(LocalDateTime.now());
-        checkInList.add(arrivalone);
-        checkInList.add(arrivaltwo);
-        checkInList.add(arrivalthree);
-
-        DashboardReservationDataDto depatureone = new DashboardReservationDataDto();
-        depatureone.setReservationId(1);
-        depatureone.setCustomerName("abc alwis");
-        depatureone.setContactNo("0774585695");
-        depatureone.setPromisedCheckInOutDateTime(LocalDateTime.now());
-
-        DashboardReservationDataDto depaturetwo = new DashboardReservationDataDto();
-        depaturetwo.setReservationId(1);
-        depaturetwo.setCustomerName("basil");
-        depaturetwo.setContactNo("0774585695");
-        depaturetwo.setPromisedCheckInOutDateTime(LocalDateTime.now());
-
-        DashboardReservationDataDto depaturethree = new DashboardReservationDataDto();
-        depaturethree.setReservationId(1);
-        depaturethree.setCustomerName("Pasan silva");
-        depaturethree.setContactNo("0774585695");
-        depaturethree.setPromisedCheckInOutDateTime(LocalDateTime.now());
-
-        checkOutList.add(depatureone);
-        checkOutList.add(depaturetwo);
-        checkOutList.add(depaturethree);
-
-        dashboardDto.setExpectedCheckInListToday(checkInList);
-        dashboardDto.setExpectedCheckOutListToday(checkOutList);
+        dashboardDto.setExpectedCheckInListToday(getTodayExpectedCheckinList());
+        dashboardDto.setExpectedCheckOutListToday(getTodayExpectedChecOutList());
         return dashboardDto;
     }
 }

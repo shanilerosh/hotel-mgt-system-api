@@ -7,6 +7,7 @@ import com.esoft.hotelmanagementsystem.enums.HouseKeepingStatus;
 import com.esoft.hotelmanagementsystem.enums.ReservationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**

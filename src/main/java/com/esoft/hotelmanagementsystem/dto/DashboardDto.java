@@ -13,9 +13,9 @@ import java.util.List;
 @Builder
 public class DashboardDto implements Serializable {
     private BigDecimal totalRevenueToday;
-    private Integer totalCheckinsToday;
-    private Integer newReservationsToday;
-    private Integer dueCheckinsToday;
+    private Long totalCheckinsToday;
+    private Long newReservationsToday;
+    private Long dueCheckinsToday;
     private Integer availableRooms;
     private Integer totalActiveGuests;
     private List<DashboardReservationDataDto> expectedCheckInListToday;

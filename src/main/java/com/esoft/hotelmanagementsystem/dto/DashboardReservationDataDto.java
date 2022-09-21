@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class DashboardReservationDataDto implements Serializable {
-    private Integer reservationId;
+    private Long reservationId;
     private String customerName;
     private String contactNo;
     private LocalDateTime promisedCheckInOutDateTime;
