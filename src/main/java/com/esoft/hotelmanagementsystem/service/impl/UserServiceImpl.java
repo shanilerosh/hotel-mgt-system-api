@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         user.getRoles().add(roleMst);
 
-        saveUser(user);
+        userRepo.save(user);
     }
 
     @Override

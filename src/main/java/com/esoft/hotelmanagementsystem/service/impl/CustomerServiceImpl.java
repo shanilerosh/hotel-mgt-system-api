@@ -74,7 +74,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .toEmail(userMst.getEmail()).build();
 
         //push to the email que
-        rabbitTemplate.convertAndSend(exchange, routingKey, emailDto);
+        //rabbitTemplate.convertAndSend(exchange, routingKey, emailDto);
 
         //TODO - Send Notification
 
