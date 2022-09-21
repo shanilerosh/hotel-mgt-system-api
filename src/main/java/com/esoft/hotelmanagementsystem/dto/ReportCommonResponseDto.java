@@ -1,7 +1,6 @@
 package com.esoft.hotelmanagementsystem.dto;
 
 import com.esoft.hotelmanagementsystem.enums.ReportType;
-import com.esoft.hotelmanagementsystem.enums.ReservationStatus;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
@@ -17,10 +16,14 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-public class ReportFilterDto implements Serializable {
+public class ReportCommonResponseDto implements Serializable {
 
-    private LocalDateTime from;
-    private LocalDateTime to;
-    @NotNull(message = "Report type is compulsory")
-    private ReportType reportType;
+    //customer report
+    private String customerName;
+    private String contactNumber;
+    private String country;
+    private String username;
+    private LocalDateTime registeredDate;
+    private String nicPass;
+
 }

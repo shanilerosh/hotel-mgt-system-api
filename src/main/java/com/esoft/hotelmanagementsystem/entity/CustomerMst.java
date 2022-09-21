@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * @author ShanilErosh
@@ -36,6 +37,8 @@ public class CustomerMst {
     @JoinColumn(name = "user_id")
     private UserMst userMst;
 
+
+    private LocalDateTime registeredDate;
 
 
 }

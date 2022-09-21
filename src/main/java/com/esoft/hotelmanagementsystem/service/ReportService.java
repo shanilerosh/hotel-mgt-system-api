@@ -1,5 +1,7 @@
 package com.esoft.hotelmanagementsystem.service;
 
+import com.esoft.hotelmanagementsystem.dto.CommonResponseDto;
+import com.esoft.hotelmanagementsystem.dto.ReportCommonResponseDto;
 import com.esoft.hotelmanagementsystem.dto.ReportFilterDto;
 
 /**
@@ -7,5 +9,5 @@ import com.esoft.hotelmanagementsystem.dto.ReportFilterDto;
  */
 public interface ReportService {
 
-    Boolean generateReport(ReportFilterDto filterDto);
+    CommonResponseDto<ReportCommonResponseDto> generateReport(ReportFilterDto filterDto);
 }

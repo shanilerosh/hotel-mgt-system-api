@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
@@ -61,7 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         userService.addRoleToUser(savedUser.getUsername(), "ROLE_CUSTOMER");
 
-        CustomerMst customerMst = CustomerMst.builder().build();
+        CustomerMst customerMst = CustomerMst.builder().registeredDate(LocalDateTime.now()).build();
 
         BeanUtils.copyProperties(customerDto, customerMst);
         customerMst.setCustomerStatus(CustomerStatus.NON_PROCEEDABLE);
