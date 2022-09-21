@@ -54,7 +54,7 @@ public class DashboardServiceImpl implements DashboardService {
                         .reservationId(obj.getReservationId())
                         .customerName(obj.getCustomerMst().getCustomerName())
                         .contactNo(obj.getCustomerMst().getContactNumber())
-                        .promisedCheckInOutDateTime(obj.getPromisedCheckedOutTime())
+                        .promisedCheckInOutDateTime(obj.getPromisedCheckedInTime())
                         .build()).collect(Collectors.toList());
 
     }
