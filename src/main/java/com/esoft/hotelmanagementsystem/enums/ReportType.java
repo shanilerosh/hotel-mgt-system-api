@@ -1,5 +1,5 @@
 package com.esoft.hotelmanagementsystem.enums;
 
 public enum ReportType {
-    RESERVATION, CUSTOMER, PAYMENT, ROOM
+    RESERVATION, CUSTOMER, PAYMENT, ROOM, REVENUE
 }

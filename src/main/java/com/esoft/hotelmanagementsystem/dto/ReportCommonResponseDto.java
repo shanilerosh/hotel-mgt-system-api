@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -25,5 +26,17 @@ public class ReportCommonResponseDto implements Serializable {
     private String username;
     private LocalDateTime registeredDate;
     private String nicPass;
+
+    //revanue
+    private BigDecimal laundryCharges;
+    private BigDecimal barCharges;
+    private BigDecimal telephoneCharges;
+    private BigDecimal clubFacility;
+    private BigDecimal ketCharges;
+    private Long reservationId;
+    private String customerAddress;
+    private LocalDateTime actualCheckoutOutDate;
+    private LocalDateTime paymentDateTime;
+
 
 }

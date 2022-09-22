@@ -59,4 +59,18 @@ public class ReportRest {
 
         Assertions.assertNotNull(reportCommonResponseDtoCommonResponseDto, "Response obj cannot be null");
     }
+
+    @Test
+    @DisplayName("Test Revenue Data")
+    void TestRevenue_Data() {
+
+        ReportFilterDto build = ReportFilterDto.builder().reportType(ReportType.REVENUE)
+                .to(LocalDateTime.of(2022,9,21,1,1))
+                .from(LocalDateTime.of(2022,8,10,1,1))
+                .build();
+
+        CommonResponseDto<ReportCommonResponseDto> reportCommonResponseDtoCommonResponseDto = reportService.generateReport(build);
+
+        Assertions.assertNotNull(reportCommonResponseDtoCommonResponseDto, "Response obj cannot be null");
+    }
 }

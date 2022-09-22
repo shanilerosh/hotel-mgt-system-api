@@ -42,6 +42,8 @@ public class ReportServiceImpl implements ReportService {
 
         if(filter.getReportType().equals(ReportType.CUSTOMER)) {
             return generateCustomerReport(filter);
+        }else if(filter.getReportType().equals(ReportType.REVENUE)) {
+            return generateRevenueReport(filter);
         }
         return null;
     }
@@ -71,6 +73,44 @@ public class ReportServiceImpl implements ReportService {
         paramField.put("username", "username");
         paramField.put("registeredDate", "registered_date");
         paramField.put("nicPass", "nic_pass");
+
+        Page<ReportCommonResponseDto> reportCommonResponseDtos = customRepo.executeCustomQuery(pageable, selectSql.concat(whereSql),
+                mapSqlParameterSource, ReportCommonResponseDto.class, paramField, countSql.concat(whereSql));
+
+        return CommonResponseDto.<ReportCommonResponseDto>builder().data(reportCommonResponseDtos.getContent())
+                .total(reportCommonResponseDtos.getTotalElements())
+                .build();
+    }
+
+
+    private CommonResponseDto<ReportCommonResponseDto> generateRevenueReport(ReportFilterDto filter) {
+
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        String whereSql = "";
+
+        String selectSql = "SELECT p.payment_amount,p.bar_charges,p.club_facility,p.ket_charges,p.laundry_charges" +
+                ",p.telephone_charges,r.reservation_id,c.customer_name,c.address,r.actual_checked_out_time,p.payment_date_time FROM payment_mst p LEFT JOIN reservation_mst r on r.reservation_id = p.payment_id LEFT JOIN customer_mst c ON c.cust_id = r.cust_id WHERE p.payment_id != 0";
+        String countSql = "SELECT count(*) FROM payment_mst p LEFT JOIN reservation_mst r on r.reservation_id = p.payment_id LEFT JOIN customer_mst c ON c.cust_id = r.cust_id WHERE p.payment_id != 0 ";
+
+
+        if (null != filter.getFrom() && null != filter.getTo()) {
+            mapSqlParameterSource.addValue("paymentDateFrom", filter.getFrom());
+            mapSqlParameterSource.addValue("paymentDateTo", filter.getTo());
+            whereSql = whereSql.concat(" AND p.payment_date_time BETWEEN :paymentDateFrom AND :paymentDateTo ");
+        }
+
+        Map<String, String> paramField = new HashMap<>();
+
+        paramField.put("customerName", "customer_name");
+        paramField.put("laundryCharges", "laundry_charges");
+        paramField.put("barCharges", "bar_charges");
+        paramField.put("telephoneCharges", "telephone_charges");
+        paramField.put("clubFacility", "club_facility");
+        paramField.put("ketCharges", "ket_charges");
+        paramField.put("reservationId", "reservation_id");
+        paramField.put("customerAddress", "address");
+        paramField.put("actualCheckoutOutDate", "actual_checkout_out_time");
+        paramField.put("paymentDateTime", "payment_date_time");
 
         Page<ReportCommonResponseDto> reportCommonResponseDtos = customRepo.executeCustomQuery(pageable, selectSql.concat(whereSql),
                 mapSqlParameterSource, ReportCommonResponseDto.class, paramField, countSql.concat(whereSql));
