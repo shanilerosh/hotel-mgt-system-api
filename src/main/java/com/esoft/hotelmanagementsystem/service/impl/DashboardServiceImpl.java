@@ -35,7 +35,7 @@ public class DashboardServiceImpl implements DashboardService {
                 .count();
     }
 
-    public Long getTotalReservations() {
+    public Long getTotalReservations(){
         return reservationRepository.findAll().stream()
                 .filter(obj -> null != obj.getCreatedDateTime() && obj.getCreatedDateTime().toLocalDate().equals(LocalDate.now()))
                 .count();
