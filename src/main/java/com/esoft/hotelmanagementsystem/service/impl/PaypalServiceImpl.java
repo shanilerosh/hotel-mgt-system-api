@@ -1,15 +1,22 @@
 package com.esoft.hotelmanagementsystem.service.impl;
 
+import com.esoft.hotelmanagementsystem.dto.EmailDto;
 import com.esoft.hotelmanagementsystem.dto.PaymentDto;
 import com.esoft.hotelmanagementsystem.dto.PaypalDto;
+import com.esoft.hotelmanagementsystem.entity.CustomerMst;
+import com.esoft.hotelmanagementsystem.entity.ReservationMst;
 import com.esoft.hotelmanagementsystem.enums.PaymentStatus;
 import com.esoft.hotelmanagementsystem.enums.PaymentType;
+import com.esoft.hotelmanagementsystem.exception.CommonException;
+import com.esoft.hotelmanagementsystem.repo.ReservationRepository;
 import com.esoft.hotelmanagementsystem.service.PaymentService;
 import com.esoft.hotelmanagementsystem.service.PaypalService;
+import com.esoft.hotelmanagementsystem.util.Constants;
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +40,15 @@ public class PaypalServiceImpl implements PaypalService {
     private String successUrl;
     @Value("${paypal.cancel-url}")
     private String  cancelUrl;
+    @Value("${queue.name-email}")
+    private String queueName;
+    @Value("${queue.exchange}")
+    private String exchange;
+    @Value("${queue.route}")
+    private String routingKey;
+
+    private final RabbitTemplate rabbitTemplate;
+    private final ReservationRepository reservationRepository;
 
 
     @Override
@@ -92,6 +108,28 @@ public class PaypalServiceImpl implements PaypalService {
         //mark payment as completed
         paymentService.finalizePaymentStatus(reservationId, paymentId, payerId, PaymentStatus.SUCCESS);
 
+        sendEmailForPayment(reservationId);
+
+
+    }
+
+    private void sendEmailForPayment(String reservationId) {
+
+        ReservationMst reservationMst = reservationRepository.findById(Long.valueOf(reservationId))
+                .orElseThrow(() -> {
+                    throw new CommonException("Reservation not found");
+                });
+
+        CustomerMst customerMst = reservationMst.getCustomerMst();
+
+
+        //send payment email
+        EmailDto emailDto = EmailDto.builder().emailBody(String.format(Constants.NEW_PAYMENT_EMAIL_BODY, customerMst.getCustomerName(),customerMst.getCustomerName(), reservationMst.getTotalAmount(),reservationId))
+                .subject(String.format(Constants.NEW_CUSTOMER_EMAIL_SUBJECT, customerMst.getCustomerName()))
+                .toEmail(customerMst.getUserMst().getEmail()).build();
+
+        //push to the email que
+        rabbitTemplate.convertAndSend(exchange, routingKey, emailDto);
     }
 
     private PaymentDto convertToPaymentDto(PaypalDto paypalDto) {

@@ -12,6 +12,15 @@ public class Constants {
             "\n" +
             " <p>Thanks & regards</p> <br><br><br><br><p style=\"font-size:11px;text-align:center\">This is an automatically generated e-mail from our System. Please do not reply to this e-mail.</p>";
 
+
+    public final static String NEW_PAYMENT_EMAIL_BODY = "" +
+            "<p>Dear ,%s</p> <br> <p>Hi %s Thank you for the payment of amounting Rs.%s for the reservation id %s. Looking forward to hear from you soon</p> <br>\n" +
+            "    \n" +
+            "\n" +
+            " <p>Thanks & regards</p> <br><br><br><br><p style=\"font-size:11px;text-align:center\">This is an automatically generated e-mail from our System. Please do not reply to this e-mail.</p>";
+
+
+
     public final static String NEW_CUSTOMER_EMAIL_SUBJECT = "Welcome, %s";
 
 }
