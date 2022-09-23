@@ -92,6 +92,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         CustomerDto customerDto = CustomerDto.builder().build();
         BeanUtils.copyProperties(customerMst, customerDto);
+        customerDto.setEmail(customerMst.getUserMst().getEmail());
 
         return customerDto;
     }
